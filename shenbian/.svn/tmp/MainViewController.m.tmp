@@ -1,0 +1,459 @@
+//
+//  MainViewController.m
+//  shenbian
+//
+//  Created by MagicYang on 4/7/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#import "MainViewController.h"
+#import "SBNavigationController.h"
+#import "ProvincePickerViewController.h"
+#import "MainObjectViewController.h"
+#import "SearchResultsViewController.h"
+#import "SearchViewController.h"
+#import "HelpViewController.h"
+
+#import "HttpRequest+Statistic.h"
+#import "CacheCenter.h"
+#import "LocationService.h"
+#import "Notifications.h"
+#import "SBLocation.h"
+#import "SBSearchBar.h"
+#import "HotChannelView.h"
+#import "VSTableView.h"
+#import "SBLocationView.h"
+#import "VSTabBarController.h"
+#import "SBApiEngine.h"
+#import "TKAlertCenter.h"
+
+
+@interface MainViewController(Private)
+
+- (void)switchCity:(id)sender;
+- (void)requestDataWithCityId:(NSInteger)cityId;
+    
+@end
+
+
+@implementation MainViewController
+
+- (void)dealloc
+{
+    [Notifier removeObserver:self name:kCityChanged object:nil];
+    [Notifier removeObserver:self name:kLocationSuccessed object:nil];
+    [Notifier removeObserver:self name:kLocationFailed object:nil];
+    [Notifier removeObserver:self name:kGuideDissmissed object:nil];
+    
+    [tableView release];
+    [searchBar release];
+    [locationView release];
+    [channelList release];
+    [areaList release];
+    
+    [super dealloc];
+}
+
+- (void)viewDidUnload
+{
+    [Notifier removeObserver:self name:kCityChanged object:nil];
+    [Notifier removeObserver:self name:kLocationSuccessed object:nil];
+    [Notifier removeObserver:self name:kLocationFailed object:nil];
+    [Notifier removeObserver:self name:kGuideDissmissed object:nil];
+    
+    Release(searchBar);
+    Release(tableView);
+    Release(locationView);
+    
+    Release(channelList);
+    Release(areaList);
+    
+    [super viewDidUnload];
+}
+
+- (void)loadView
+{
+    [super loadView];
+    
+//    UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 115, 27)];
+//    titleView.contentMode = UIViewContentModeCenter;
+//    titleView.image = [UIImage imageNamed:@"navigationbar_titleView.png"];
+//    self.navigationItem.titleView = titleView;
+//    [titleView release];
+    
+	self.navigationItem.title = @"搜索";
+	
+    NSString *title = CurrentCity.name;
+    self.navigationItem.rightBarButtonItem = [SBNavigationController buttonItemWithTitle:title andAction:@selector(switchCity:) inDelegate:self];
+    UIImageView *magnfiyingGlass = [[UIImageView alloc] initWithImage:PNGImage(@"searchbar_magnfiyingGlass")];
+    magnfiyingGlass.frame = CGRectZero;
+    searchBar = [[SBSearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, CommonHeaderHeight) delegate:self andTitleView:magnfiyingGlass];
+    [searchBar setPlaceHolder:@"商户名等"];
+    [searchBar showSawtooth];
+    [magnfiyingGlass release];
+    
+    tableView = [[VSTableView alloc] initWithFrame:CGRectMake(0, CommonHeaderHeight, 320, 367 - CommonHeaderHeight + 5) style:UITableViewStyleGrouped];
+    
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    tableView.backgroundColor = [UIColor clearColor];
+    tableView.backgroundImage = PNGImage(@"mainpage_bg");
+    
+    locationView = [[SBLocationView alloc] initWithAddress:@"..." andPosition:CGPointMake(0, 367 - 15)];
+    
+    [self addSubview:tableView];
+    [self addSubview:searchBar];
+    [self addSubview:locationView];
+    
+    [Notifier addObserver:self selector:@selector(cityChanged:) name:kCityChanged object:nil];
+    [Notifier addObserver:self selector:@selector(getLocationSuccessed:) name:kLocationSuccessed object:nil];
+    [Notifier addObserver:self selector:@selector(getLocationFailed:) name:kLocationFailed object:nil];
+    [Notifier addObserver:self selector:@selector(guideDismissed) name:kGuideDissmissed object:nil];
+    
+    channelList = [NSMutableArray new];
+    areaList    = [NSMutableArray new];
+}
+
+- (void)initLocation
+{
+    if (!hasLocated) {
+        hasLocated = YES;
+        [[LocationService sharedInstance] startLocation];
+    }
+}
+
+- (void)initDataAndUI
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    tableView.alpha = 1;
+    [UIView commitAnimations];
+
+    if ([areaList count] == 0 || [channelList count] == 0) {
+        [self requestDataWithCityId:CurrentCity.id];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	Stat(@"search_into?city_id=%d", CurrentCity.id);
+	
+    [super viewDidAppear:animated];
+    [self initLocation];
+    [self initDataAndUI];
+}
+
+- (void)switchCity:(id)sender
+{
+    ProvincePickerViewController *controller = [[ProvincePickerViewController alloc] initWithDelegate:self];
+    controller.title = @"选择城市";
+    controller.isForceChoose = sender ? NO : YES;
+    controller.delegate = self;
+    controller.hasTabbar = NO;
+    controller.isCascadeCity = YES;
+    controller.needLocating = YES;
+    controller.hasCancelButton = YES;
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self showModalViewController:nc animated:(sender != nil)];
+    [controller release];
+    [nc release];
+}
+
+- (void)cityChanged:(id)sender 
+{
+	self.navigationItem.rightBarButtonItem = [SBNavigationController buttonItemWithTitle:CurrentCity.name andAction:@selector(switchCity:) inDelegate:self];
+    [self requestDataWithCityId:CurrentCity.id];
+}
+
+- (void)guideDismissed
+{
+    SBLocation *location = [[LocationService sharedInstance] currentLocation];
+    if (!location) {
+        [self switchCity:nil];
+    } else {
+        Area *city = [Area new];
+        city.id = location.cityId;
+        city.name = location.cityName;
+        CurrentCity = city;
+        [city release];
+    }
+}
+
+- (void)requestDataWithCityId:(NSInteger)cityId
+{
+    CancelRequest(request);
+    if (!loadingView) {
+//        loadingView = [[LoadingView alloc] initWithFrame:CGRectZero andMessage:nil];
+        loadingView = [[LoadingView alloc] initNoIconViewWithFrame:CGRectZero andMessage:nil];
+    }
+    
+    [self.view addSubview:loadingView];
+    
+    request = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+    // http://client.shenbian.com/iphone/getHotDistrict?[x=float&y=float]|[&city_id=int]
+    NSString *url = [NSString stringWithFormat:@"%@/getHotDistrict?city_id=%d", ROOT_URL, cityId];
+    [request requestGET:url useCache:YES useStat:YES];
+}
+
+- (void)goChannelSearch:(id)sender
+{
+    SBCategory *category = (SBCategory *)sender;
+    
+    if ([SBCategory belongsToBianMin:category.id]) {
+        MainObjectViewController *controller = [MainObjectViewController new];
+		controller.type = ShowChannel;
+		[self.navigationController pushViewController:controller animated:YES];
+		[controller release];
+    } else {
+        SearchResultsViewController *controller = [SearchResultsViewController new];
+        controller.category   = category.name;
+        controller.categoryId = category.id;
+        [self.navigationController pushViewController:controller animated:YES];
+        [controller release];
+    }
+}
+
+
+
+#pragma mark -
+#pragma mark Table view data source
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+	return [areaList count] > 0 ? [areaList count] + 1 : 0;
+}
+
+- (NSString *)tableView:(UITableView *)table titleForHeaderInSection:(NSInteger)section {
+	return [areaList count] == 0 ? nil : @"热门区域";
+}
+
+- (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return 40;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"CellIdentifier";
+    
+    UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        cell.textLabel.font = FontLiteWithSize(16);
+    }
+    
+    if (indexPath.row == [areaList count] || indexPath.row == 6) {
+        cell.textLabel.textAlignment = UITextAlignmentCenter;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.textLabel.text = @"全部区域";
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.textAlignment = UITextAlignmentLeft;
+        cell.textLabel.text = ((Area *)[areaList objectAtIndex:indexPath.row]).name;
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [table deselectRowAtIndexPath:indexPath animated:YES];
+	
+	if (indexPath.row == [areaList count] || indexPath.row == 6) {
+		MainObjectViewController *controller = [MainObjectViewController new];
+		controller.type = ShowArea;
+		[self.navigationController pushViewController:controller animated:YES];
+		[controller release];
+	} else {
+		SearchResultsViewController *controller = [SearchResultsViewController new];
+		Area *area = [areaList objectAtIndex:indexPath.row];
+        controller.area   = area.name;
+		controller.areaId = area.id;
+		[self.navigationController pushViewController:controller animated:YES];
+		[controller release];
+	}
+}
+
+
+#pragma mark -
+#pragma mark HttpRequestDelegate
+- (void)requestFailed:(HttpRequest*)req error:(NSError*)error {
+    [loadingView removeFromSuperview];
+    Release(request);
+}
+
+- (void)requestSucceeded:(HttpRequest*)req {
+	NSError *error = nil;
+    NSDictionary* dict = [SBApiEngine parseHttpData:request.recievedData error:&error];
+    if (error) {
+        [self requestFailed:request error:error];
+        return;
+    }
+    
+    [channelList removeAllObjects];
+    [areaList removeAllObjects];
+    
+    NSArray *catA = [dict objectForKey:@"categoriesA"]; // 热门分类
+    NSArray *catB = [dict objectForKey:@"categoriesB"]; // 非热门分类, 统统归为“便民”
+    NSArray *district = [dict objectForKey:@"district"];
+    hasBianmin = [catB count] > 0;
+    
+    NSMutableArray *category = [NSMutableArray array];
+    [category addObjectsFromArray:catA];
+    [category addObjectsFromArray:catB];
+    
+    for (NSDictionary *d in category) {
+        SBCategory *ch = [SBCategory new];
+        ch.id       = [[d objectForKey:@"cat_code"] intValue];
+        ch.name     = [d objectForKey:@"cat_name"];
+        [channelList addObject:ch];
+        [ch release];
+    }
+
+    for (NSDictionary *d in district) {
+        Area *area = [Area new];
+        area.id   = [[d objectForKey:@"area_id"] intValue];
+        area.name = [d objectForKey:@"area_name"];
+        NSArray *subs = [d objectForKey:@"area_list"];
+        for (NSDictionary *sub in subs) {
+            Area *subArea = [Area new];
+            subArea.id   = [[sub objectForKey:@"area_id"] intValue];
+            subArea.name = [sub objectForKey:@"area_name"];
+            [area addChild:subArea];
+            [subArea release];
+        }
+        [areaList addObject:area];
+        [area release];
+    }
+    
+    HotChannelView *header = [[HotChannelView alloc] initWithDelegate:self andItems:channelList];
+    tableView.tableHeaderView = header;
+    [header show];
+    [header release];
+    
+    [tableView reloadData];
+    [loadingView removeFromSuperview];
+    Release(request);
+}
+
+
+#pragma mark -
+#pragma mark LocationService
+- (void)getLocationSuccessed:(NSNotification *)notification 
+{    
+    SBLocation *location = [[LocationService sharedInstance] currentLocation];
+    locationView.address = location.address;
+    
+    if (CurrentCity) {
+        if (CurrentCity.id != location.cityId 
+            && location.cityName 
+            && [CacheCenter sharedInstance].promptNotCurrentCity
+            && isShowing) {
+            [CacheCenter sharedInstance].promptNotCurrentCity = NO;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil 
+                                                            message:[NSString stringWithFormat:@"定位到您当前在%@, 是否切换城市", location.cityName]
+                                                           delegate:self
+                                                  cancelButtonTitle:@"取消"
+                                                  otherButtonTitles:@"是的", nil];
+            [alert show];
+            [alert release];
+            Stat(@"citychange_popup?city_id=%d", location.cityId);
+        }
+    } else {
+        Area *city = [Area new];
+		city.id = location.cityId;
+		city.name = location.cityName;
+		CurrentCity = city;
+        [city release];
+    }
+}
+
+- (void)getLocationFailed:(NSNotification *)notification
+{
+    if ([[LocationService sharedInstance] currentLocation] && !isShowing) {
+        return;
+    }
+    
+    if ([[notification object] isKindOfClass:[NSError class]]) {
+        NSError *error = (NSError *)[notification object];
+        if ([error code] == 1) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"定位失败"
+                                                            message:@"请确认是否开启定位服务"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"确定"
+                                                  otherButtonTitles:@"帮助", nil];
+            alert.tag = 1;
+            [alert show];
+            [alert release];
+        }
+    } else {
+        TKAlert(@"定位失败");
+    }
+}
+
+
+#pragma mark -
+#pragma mark SBPickerDelegate
+- (void)pickerController:(SBPickerViewController *)controller pickData:(SBObject *)data {
+	Area *c = (Area *)data;
+	[CacheCenter sharedInstance].currentCity = c;
+    
+    if ([areaList count] == 0 || [channelList count] == 0) {
+        [self requestDataWithCityId:CurrentCity.id];
+    }
+    
+	[controller dismissModalViewControllerAnimated:YES];
+}
+
+- (void)pickerControllerCancelled:(SBPickerViewController *)controller {
+	[controller dismissModalViewControllerAnimated:YES];
+}
+
+
+#pragma mark -
+#pragma mark SBSearchBarDelegate
+- (void)goSearch {
+	SearchViewController *controller = [SearchViewController new];
+	[self.navigationController pushViewController:controller animated:NO];
+	[controller release];
+	[searchBar resignFirstResponder];
+}
+
+- (void)searchBarDidBeginEditing:(SBSearchBar *)bar {
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(goSearch)];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+	tableView.alpha = 0;
+	[UIView commitAnimations];
+}
+
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView.tag == 1) {
+        if (buttonIndex != [alertView cancelButtonIndex]) {
+            HelpViewController *controller = [HelpViewController new];
+            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+            [self showModalViewController:navController animated:YES];
+            [controller release];
+            [navController release];
+        }
+    } else {
+        if (buttonIndex != [alertView cancelButtonIndex]) {
+            SBLocation *location = [[LocationService sharedInstance] currentLocation];
+            Area *city = [Area new];
+            city.id = location.cityId;
+            city.name = location.cityName;
+            [CacheCenter sharedInstance].currentCity = city;
+            [city release];
+            Stat(@"citychange_change");
+        } else {
+            Stat(@"citychange_cancel");
+        }
+    }
+}
+
+@end

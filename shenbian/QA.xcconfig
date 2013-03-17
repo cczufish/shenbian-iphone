@@ -1,0 +1,11 @@
+//
+//  QA.xcconfig
+//  shenbian
+//
+//  Created by xhan on 4/8/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#include "Debug.xcconfig"
+
+GCC_PREPROCESSOR_DEFINITIONS = ENV_QA DEBUG

@@ -1,0 +1,191 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/7774/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser
+END
+KTPhotoView+SDWebImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoView+SDWebImage.m
+END
+SDWebImageManagerDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDWebImageManagerDelegate.h
+END
+SDImageCache.h
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDImageCache.h
+END
+KTThumbsViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbsViewController.h
+END
+SDWebImageManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDWebImageManager.h
+END
+SDImageCache.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDImageCache.m
+END
+KTThumbsViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbsViewController.m
+END
+README.md
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/README.md
+END
+SDWebImageManager.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDWebImageManager.m
+END
+KTPhotoBrowserDataSource.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoBrowserDataSource.h
+END
+UIImageView+WebCache.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/UIImageView+WebCache.h
+END
+KTThumbView.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbView.h
+END
+KTPhotoBrowserDataSource.m
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoBrowserDataSource.m
+END
+KTThumbView+SDWebImage.h
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbView+SDWebImage.h
+END
+UIImageView+WebCache.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/UIImageView+WebCache.m
+END
+KTThumbView.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbView.m
+END
+SDWebImageDownloaderDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDWebImageDownloaderDelegate.h
+END
+KTThumbView+SDWebImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbView+SDWebImage.m
+END
+SDWebImageDownloader.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDWebImageDownloader.h
+END
+SDWebImageDownloader.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDWebImageDownloader.m
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/LICENSE
+END
+KTThumbsView.h
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbsView.h
+END
+KTThumbsView.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTThumbsView.m
+END
+KTPhotoScrollViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoScrollViewController.h
+END
+KTPhotoScrollViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/app/ttplayer/!svn/ver/7774/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoScrollViewController.m
+END
+KTPhotoBrowserGlobal.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoBrowserGlobal.h
+END
+KTPhotoBrowserGlobal.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoBrowserGlobal.m
+END
+KTPhotoView.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoView.h
+END
+KTPhotoView+SDWebImage.h
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoView+SDWebImage.h
+END
+SDImageCacheDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/app/ttplayer/!svn/ver/4183/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/SDImageCacheDelegate.h
+END
+KTPhotoView.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/app/ttplayer/!svn/ver/7590/trunk/mobile/shenbian-iphone/shenbian/3rdParty/KTPhotoBrowser/KTPhotoView.m
+END

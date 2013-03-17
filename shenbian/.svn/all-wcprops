@@ -1,0 +1,1901 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/app/ttplayer/!svn/ver/9598/trunk/mobile/shenbian-iphone/shenbian
+END
+ShopInfoViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/9069/trunk/mobile/shenbian-iphone/shenbian/ShopInfoViewController.m
+END
+SBAlbum.m
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/SBAlbum.m
+END
+HttpRequest+Statistic.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/HttpRequest+Statistic.h
+END
+PictureDetailTitleView.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6250/trunk/mobile/shenbian-iphone/shenbian/PictureDetailTitleView.h
+END
+StatService.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8494/trunk/mobile/shenbian-iphone/shenbian/StatService.h
+END
+SBNavigationController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/4791/trunk/mobile/shenbian-iphone/shenbian/SBNavigationController.m
+END
+SearchResultCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SearchResultCellView.h
+END
+HttpRequest+Statistic.m
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/7994/trunk/mobile/shenbian-iphone/shenbian/HttpRequest+Statistic.m
+END
+SearchResultsHeader.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/6997/trunk/mobile/shenbian-iphone/shenbian/SearchResultsHeader.h
+END
+ShopVisitedViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/5120/trunk/mobile/shenbian-iphone/shenbian/ShopVisitedViewController.h
+END
+PictureDetailTitleView.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6918/trunk/mobile/shenbian-iphone/shenbian/PictureDetailTitleView.m
+END
+StatService.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8494/trunk/mobile/shenbian-iphone/shenbian/StatService.m
+END
+SearchResultCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SearchResultCellView.m
+END
+SearchResultsHeader.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/6997/trunk/mobile/shenbian-iphone/shenbian/SearchResultsHeader.m
+END
+ShopVisitedViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/8017/trunk/mobile/shenbian-iphone/shenbian/ShopVisitedViewController.m
+END
+VSAlertView.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/7547/trunk/mobile/shenbian-iphone/shenbian/VSAlertView.h
+END
+Entitlements.plist
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/7994/trunk/mobile/shenbian-iphone/shenbian/Entitlements.plist
+END
+VSAlertView.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/7547/trunk/mobile/shenbian-iphone/shenbian/VSAlertView.m
+END
+SBApiEngine.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/SBApiEngine.h
+END
+WeiBoShareCommentsView.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6576/trunk/mobile/shenbian-iphone/shenbian/WeiBoShareCommentsView.h
+END
+SBApiEngine.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/SBApiEngine.m
+END
+SBTextFieldSubtitleCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/6044/trunk/mobile/shenbian-iphone/shenbian/SBTextFieldSubtitleCell.h
+END
+SBObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/5994/trunk/mobile/shenbian-iphone/shenbian/SBObject.h
+END
+WTFButton.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/6213/trunk/mobile/shenbian-iphone/shenbian/WTFButton.h
+END
+WeiBoShareCommentsView.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6576/trunk/mobile/shenbian-iphone/shenbian/WeiBoShareCommentsView.m
+END
+SBTextFieldSubtitleCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/5114/trunk/mobile/shenbian-iphone/shenbian/SBTextFieldSubtitleCell.m
+END
+SBObject.m
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/5994/trunk/mobile/shenbian-iphone/shenbian/SBObject.m
+END
+AttentionCell.xib
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9192/trunk/mobile/shenbian-iphone/shenbian/AttentionCell.xib
+END
+WTFButton.m
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/7573/trunk/mobile/shenbian-iphone/shenbian/WTFButton.m
+END
+DiscoveryCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/5146/trunk/mobile/shenbian-iphone/shenbian/DiscoveryCellView.h
+END
+ShopInfoPopupView.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/ShopInfoPopupView.h
+END
+DiscoveryViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/DiscoveryViewController.h
+END
+DiscoveryCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/DiscoveryCellView.m
+END
+VSTabBarController.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/5579/trunk/mobile/shenbian-iphone/shenbian/VSTabBarController.h
+END
+ShopInfoPopupView.m
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/ShopInfoPopupView.m
+END
+DiscoveryViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/9311/trunk/mobile/shenbian-iphone/shenbian/DiscoveryViewController.m
+END
+SBGuideView.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/6451/trunk/mobile/shenbian-iphone/shenbian/SBGuideView.h
+END
+VSTabBarController.m
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/7994/trunk/mobile/shenbian-iphone/shenbian/VSTabBarController.m
+END
+PhotoUploadSuccessVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/8192/trunk/mobile/shenbian-iphone/shenbian/PhotoUploadSuccessVC.h
+END
+SBGuideView.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/6562/trunk/mobile/shenbian-iphone/shenbian/SBGuideView.m
+END
+AdWebPageController.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/7952/trunk/mobile/shenbian-iphone/shenbian/AdWebPageController.h
+END
+term.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/6618/trunk/mobile/shenbian-iphone/shenbian/term.html
+END
+PhotoUploadSuccessVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/8494/trunk/mobile/shenbian-iphone/shenbian/PhotoUploadSuccessVC.m
+END
+UIDevice+Hardware.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/UIDevice+Hardware.h
+END
+SBThumbsViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/4445/trunk/mobile/shenbian-iphone/shenbian/SBThumbsViewController.h
+END
+HttpRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8023/trunk/mobile/shenbian-iphone/shenbian/HttpRequest.h
+END
+AdWebPageController.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/9134/trunk/mobile/shenbian-iphone/shenbian/AdWebPageController.m
+END
+CommodityPhotoDetailVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/9492/trunk/mobile/shenbian-iphone/shenbian/CommodityPhotoDetailVC.h
+END
+IntroViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/6562/trunk/mobile/shenbian-iphone/shenbian/IntroViewController.h
+END
+UIDevice+Hardware.m
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/UIDevice+Hardware.m
+END
+SBThumbsViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/4558/trunk/mobile/shenbian-iphone/shenbian/SBThumbsViewController.m
+END
+HttpRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9134/trunk/mobile/shenbian-iphone/shenbian/HttpRequest.m
+END
+CommentListViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/CommentListViewController.h
+END
+PhotoController.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9558/trunk/mobile/shenbian-iphone/shenbian/PhotoController.h
+END
+CommodityPhotoDetailVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/9492/trunk/mobile/shenbian-iphone/shenbian/CommodityPhotoDetailVC.m
+END
+IntroViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/8013/trunk/mobile/shenbian-iphone/shenbian/IntroViewController.m
+END
+VSTextFieldCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/6044/trunk/mobile/shenbian-iphone/shenbian/VSTextFieldCell.h
+END
+PhotoController.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9586/trunk/mobile/shenbian-iphone/shenbian/PhotoController.m
+END
+CommentListViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/8106/trunk/mobile/shenbian-iphone/shenbian/CommentListViewController.m
+END
+Utility.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/7994/trunk/mobile/shenbian-iphone/shenbian/Utility.h
+END
+AreaPickerViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/5368/trunk/mobile/shenbian-iphone/shenbian/AreaPickerViewController.h
+END
+VSTextFieldCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/6044/trunk/mobile/shenbian-iphone/shenbian/VSTextFieldCell.m
+END
+Utility.m
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/7994/trunk/mobile/shenbian-iphone/shenbian/Utility.m
+END
+AreaPickerViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/AreaPickerViewController.m
+END
+PhotoCommentCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/6572/trunk/mobile/shenbian-iphone/shenbian/PhotoCommentCell.h
+END
+MedalCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/MedalCellView.h
+END
+ErrorDic.plist
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/9492/trunk/mobile/shenbian-iphone/shenbian/ErrorDic.plist
+END
+PhotoCommentCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/6918/trunk/mobile/shenbian-iphone/shenbian/PhotoCommentCell.m
+END
+DatasourceDiscovery.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/8231/trunk/mobile/shenbian-iphone/shenbian/DatasourceDiscovery.h
+END
+MedalCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8192/trunk/mobile/shenbian-iphone/shenbian/MedalCellView.m
+END
+AdShopController.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/7952/trunk/mobile/shenbian-iphone/shenbian/AdShopController.h
+END
+SBNodataView.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SBNodataView.h
+END
+DatasourceDiscovery.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/9487/trunk/mobile/shenbian-iphone/shenbian/DatasourceDiscovery.m
+END
+AdShopController.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/7951/trunk/mobile/shenbian-iphone/shenbian/AdShopController.m
+END
+BadgeListView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5137/trunk/mobile/shenbian-iphone/shenbian/BadgeListView.h
+END
+SBNodataView.m
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SBNodataView.m
+END
+BadgeListView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7560/trunk/mobile/shenbian-iphone/shenbian/BadgeListView.m
+END
+ConfirmCenter.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5637/trunk/mobile/shenbian-iphone/shenbian/ConfirmCenter.h
+END
+ConfirmCenter.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5637/trunk/mobile/shenbian-iphone/shenbian/ConfirmCenter.m
+END
+WTFButton2.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/5315/trunk/mobile/shenbian-iphone/shenbian/WTFButton2.h
+END
+BadgeDetailVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7557/trunk/mobile/shenbian-iphone/shenbian/BadgeDetailVC.h
+END
+AdvertisementController.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/7960/trunk/mobile/shenbian-iphone/shenbian/AdvertisementController.h
+END
+BadgeDetailVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/9171/trunk/mobile/shenbian-iphone/shenbian/BadgeDetailVC.m
+END
+WTFButton2.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/5316/trunk/mobile/shenbian-iphone/shenbian/WTFButton2.m
+END
+AdvertisementController.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/8365/trunk/mobile/shenbian-iphone/shenbian/AdvertisementController.m
+END
+SBComment.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/SBComment.h
+END
+HelpViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/6562/trunk/mobile/shenbian-iphone/shenbian/HelpViewController.h
+END
+AlbumCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4558/trunk/mobile/shenbian-iphone/shenbian/AlbumCellView.h
+END
+SBComment.m
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/8725/trunk/mobile/shenbian-iphone/shenbian/SBComment.m
+END
+HelpViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/7021/trunk/mobile/shenbian-iphone/shenbian/HelpViewController.m
+END
+SBLoadingView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4427/trunk/mobile/shenbian-iphone/shenbian/SBLoadingView.h
+END
+AlbumCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8355/trunk/mobile/shenbian-iphone/shenbian/AlbumCellView.m
+END
+SBLoadingView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4427/trunk/mobile/shenbian-iphone/shenbian/SBLoadingView.m
+END
+SBSubcategoryTabCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4012/trunk/mobile/shenbian-iphone/shenbian/SBSubcategoryTabCell.h
+END
+shenbian-Prefix.pch
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/9436/trunk/mobile/shenbian-iphone/shenbian/shenbian-Prefix.pch
+END
+SBSubcategoryTabCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/6017/trunk/mobile/shenbian-iphone/shenbian/SBSubcategoryTabCell.m
+END
+Notifications.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7064/trunk/mobile/shenbian-iphone/shenbian/Notifications.h
+END
+CommentInfoView.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/5517/trunk/mobile/shenbian-iphone/shenbian/CommentInfoView.h
+END
+SignupController.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/SignupController.h
+END
+SignupController.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/SignupController.m
+END
+CommentInfoView.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/7039/trunk/mobile/shenbian-iphone/shenbian/CommentInfoView.m
+END
+VSPickerView.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/VSPickerView.h
+END
+TreasureView.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/4865/trunk/mobile/shenbian-iphone/shenbian/TreasureView.h
+END
+PhotoWrapperView.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/6873/trunk/mobile/shenbian-iphone/shenbian/PhotoWrapperView.h
+END
+VSTabBarController+Swip.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/5465/trunk/mobile/shenbian-iphone/shenbian/VSTabBarController+Swip.h
+END
+VSPickerView.m
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/VSPickerView.m
+END
+SBSegmentCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5368/trunk/mobile/shenbian-iphone/shenbian/SBSegmentCell.h
+END
+TreasureView.m
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/4865/trunk/mobile/shenbian-iphone/shenbian/TreasureView.m
+END
+PhotoWrapperView.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/9284/trunk/mobile/shenbian-iphone/shenbian/PhotoWrapperView.m
+END
+SBAttention.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8957/trunk/mobile/shenbian-iphone/shenbian/SBAttention.h
+END
+VSTabBarController+Swip.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/5465/trunk/mobile/shenbian-iphone/shenbian/VSTabBarController+Swip.m
+END
+SBSegmentCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5368/trunk/mobile/shenbian-iphone/shenbian/SBSegmentCell.m
+END
+PhotoHeaderView.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/6606/trunk/mobile/shenbian-iphone/shenbian/PhotoHeaderView.h
+END
+SBAttention.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8957/trunk/mobile/shenbian-iphone/shenbian/SBAttention.m
+END
+SearchCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/5531/trunk/mobile/shenbian-iphone/shenbian/SearchCellView.h
+END
+PhotoHeaderView.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9250/trunk/mobile/shenbian-iphone/shenbian/PhotoHeaderView.m
+END
+SearchCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SearchCellView.m
+END
+AlertCenter.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/AlertCenter.h
+END
+PickCommodityViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/8745/trunk/mobile/shenbian-iphone/shenbian/PickCommodityViewController.h
+END
+HttpRequest+NetworkIndicator.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/HttpRequest+NetworkIndicator.h
+END
+VSSwitchCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/6084/trunk/mobile/shenbian-iphone/shenbian/VSSwitchCell.h
+END
+CommentInfoViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/4464/trunk/mobile/shenbian-iphone/shenbian/CommentInfoViewController.h
+END
+AlertCenter.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/5637/trunk/mobile/shenbian-iphone/shenbian/AlertCenter.m
+END
+PickCommodityViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/9596/trunk/mobile/shenbian-iphone/shenbian/PickCommodityViewController.m
+END
+HttpRequest+NetworkIndicator.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/HttpRequest+NetworkIndicator.m
+END
+VSSwitchCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/6084/trunk/mobile/shenbian-iphone/shenbian/VSSwitchCell.m
+END
+SBSegmentView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5368/trunk/mobile/shenbian-iphone/shenbian/SBSegmentView.h
+END
+CommentInfoViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/8106/trunk/mobile/shenbian-iphone/shenbian/CommentInfoViewController.m
+END
+UIImage+Extends.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/UIImage+Extends.h
+END
+BadgeListVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9134/trunk/mobile/shenbian-iphone/shenbian/BadgeListVC.h
+END
+SBSegmentView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5377/trunk/mobile/shenbian-iphone/shenbian/SBSegmentView.m
+END
+UIImage+Extends.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/UIImage+Extends.m
+END
+BadgeListVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9171/trunk/mobile/shenbian-iphone/shenbian/BadgeListVC.m
+END
+SBLocation.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/9558/trunk/mobile/shenbian-iphone/shenbian/SBLocation.h
+END
+Debug.xcconfig
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/5213/trunk/mobile/shenbian-iphone/shenbian/Debug.xcconfig
+END
+SBLocation.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/9558/trunk/mobile/shenbian-iphone/shenbian/SBLocation.m
+END
+CityPickerViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/CityPickerViewController.h
+END
+UIImageView+DispatchLoad.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/6044/trunk/mobile/shenbian-iphone/shenbian/UIImageView+DispatchLoad.h
+END
+AboutViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/5048/trunk/mobile/shenbian-iphone/shenbian/AboutViewController.h
+END
+BadgeInfoView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7390/trunk/mobile/shenbian-iphone/shenbian/BadgeInfoView.h
+END
+CustomCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/CustomCell.h
+END
+CityPickerViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/CityPickerViewController.m
+END
+MainObjectViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/5368/trunk/mobile/shenbian-iphone/shenbian/MainObjectViewController.h
+END
+UIImageView+DispatchLoad.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/6044/trunk/mobile/shenbian-iphone/shenbian/UIImageView+DispatchLoad.m
+END
+AboutViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/8867/trunk/mobile/shenbian-iphone/shenbian/AboutViewController.m
+END
+BadgeInfoView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7579/trunk/mobile/shenbian-iphone/shenbian/BadgeInfoView.m
+END
+SBSearchBar.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/4020/trunk/mobile/shenbian-iphone/shenbian/SBSearchBar.h
+END
+CustomCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/CustomCell.m
+END
+MainObjectViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/8078/trunk/mobile/shenbian-iphone/shenbian/MainObjectViewController.m
+END
+VSPageView.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/9134/trunk/mobile/shenbian-iphone/shenbian/VSPageView.h
+END
+SBSearchBar.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/6664/trunk/mobile/shenbian-iphone/shenbian/SBSearchBar.m
+END
+VSPageView.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/6577/trunk/mobile/shenbian-iphone/shenbian/VSPageView.m
+END
+SearchResultsViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/SearchResultsViewController.h
+END
+SBCoupon.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/SBCoupon.h
+END
+SBAdvertisementView.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/7951/trunk/mobile/shenbian-iphone/shenbian/SBAdvertisementView.h
+END
+SBNoResultView.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/7305/trunk/mobile/shenbian-iphone/shenbian/SBNoResultView.h
+END
+SearchResultsViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SearchResultsViewController.m
+END
+Online.xcconfig
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7194/trunk/mobile/shenbian-iphone/shenbian/Online.xcconfig
+END
+SBCoupon.m
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/6563/trunk/mobile/shenbian-iphone/shenbian/SBCoupon.m
+END
+SBAdvertisementView.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/8097/trunk/mobile/shenbian-iphone/shenbian/SBAdvertisementView.m
+END
+SBNoResultView.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/7305/trunk/mobile/shenbian-iphone/shenbian/SBNoResultView.m
+END
+SBPopupTextField.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SBPopupTextField.h
+END
+PhotoSubmitVC.xib
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/7299/trunk/mobile/shenbian-iphone/shenbian/PhotoSubmitVC.xib
+END
+SBCommodityPhoto.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/SBCommodityPhoto.h
+END
+VSCommentView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8725/trunk/mobile/shenbian-iphone/shenbian/VSCommentView.h
+END
+SBPopupTextField.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/5431/trunk/mobile/shenbian-iphone/shenbian/SBPopupTextField.m
+END
+SBCommodityPhoto.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/8725/trunk/mobile/shenbian-iphone/shenbian/SBCommodityPhoto.m
+END
+QA.xcconfig
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/4618/trunk/mobile/shenbian-iphone/shenbian/QA.xcconfig
+END
+VSCommentView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8725/trunk/mobile/shenbian-iphone/shenbian/VSCommentView.m
+END
+CommodityPhotoSingleView.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/7340/trunk/mobile/shenbian-iphone/shenbian/CommodityPhotoSingleView.h
+END
+SBSuggestion.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SBSuggestion.h
+END
+CommodityPhotoSingleView.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/9237/trunk/mobile/shenbian-iphone/shenbian/CommodityPhotoSingleView.m
+END
+SBSuggestion.m
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SBSuggestion.m
+END
+BrowseHistoryViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/5214/trunk/mobile/shenbian-iphone/shenbian/BrowseHistoryViewController.h
+END
+MainViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/MainViewController.h
+END
+PhotoCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7221/trunk/mobile/shenbian-iphone/shenbian/PhotoCellView.h
+END
+shenbian-Info.plist
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/7090/trunk/mobile/shenbian-iphone/shenbian/shenbian-Info.plist
+END
+BrowseHistoryViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/8013/trunk/mobile/shenbian-iphone/shenbian/BrowseHistoryViewController.m
+END
+MainViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/MainViewController.m
+END
+PhotoCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7221/trunk/mobile/shenbian-iphone/shenbian/PhotoCellView.m
+END
+AttentionView.xib
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9192/trunk/mobile/shenbian-iphone/shenbian/AttentionView.xib
+END
+SBPickerButton.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SBPickerButton.h
+END
+PictureDetailHeaderView.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/6250/trunk/mobile/shenbian-iphone/shenbian/PictureDetailHeaderView.h
+END
+SBPickerButton.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/4294/trunk/mobile/shenbian-iphone/shenbian/SBPickerButton.m
+END
+PictureDetailHeaderView.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/6250/trunk/mobile/shenbian-iphone/shenbian/PictureDetailHeaderView.m
+END
+HttpRequest+FilePost.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4779/trunk/mobile/shenbian-iphone/shenbian/HttpRequest+FilePost.h
+END
+SBVoteRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/SBVoteRequest.h
+END
+HttpRequest+FilePost.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4836/trunk/mobile/shenbian-iphone/shenbian/HttpRequest+FilePost.m
+END
+SBVoteRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/7023/trunk/mobile/shenbian-iphone/shenbian/SBVoteRequest.m
+END
+SBVersionUpdateController.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/8419/trunk/mobile/shenbian-iphone/shenbian/SBVersionUpdateController.h
+END
+ErrorBase.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/9250/trunk/mobile/shenbian-iphone/shenbian/ErrorBase.h
+END
+SBVersionUpdateController.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/9534/trunk/mobile/shenbian-iphone/shenbian/SBVersionUpdateController.m
+END
+HomeViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/9112/trunk/mobile/shenbian-iphone/shenbian/HomeViewController.h
+END
+ErrorBase.m
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/9250/trunk/mobile/shenbian-iphone/shenbian/ErrorBase.m
+END
+HomeViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/9598/trunk/mobile/shenbian-iphone/shenbian/HomeViewController.m
+END
+UIButton+RemoteImage.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4380/trunk/mobile/shenbian-iphone/shenbian/UIButton+RemoteImage.h
+END
+SearchViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4681/trunk/mobile/shenbian-iphone/shenbian/SearchViewController.h
+END
+AttentionCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8957/trunk/mobile/shenbian-iphone/shenbian/AttentionCell.h
+END
+ChannelPickerViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/ChannelPickerViewController.h
+END
+AdActivityController.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/7952/trunk/mobile/shenbian-iphone/shenbian/AdActivityController.h
+END
+UIButton+RemoteImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/4380/trunk/mobile/shenbian-iphone/shenbian/UIButton+RemoteImage.m
+END
+SearchViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/8355/trunk/mobile/shenbian-iphone/shenbian/SearchViewController.m
+END
+AttentionCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/9163/trunk/mobile/shenbian-iphone/shenbian/AttentionCell.m
+END
+ChannelPickerViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/ChannelPickerViewController.m
+END
+AdActivityController.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/9267/trunk/mobile/shenbian-iphone/shenbian/AdActivityController.m
+END
+UserPhotoListVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9163/trunk/mobile/shenbian-iphone/shenbian/UserPhotoListVC.h
+END
+SuggestViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/5013/trunk/mobile/shenbian-iphone/shenbian/SuggestViewController.h
+END
+ShopMapInfoViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/7994/trunk/mobile/shenbian-iphone/shenbian/ShopMapInfoViewController.h
+END
+UserPhotoListVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9163/trunk/mobile/shenbian-iphone/shenbian/UserPhotoListVC.m
+END
+SuggestViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/5016/trunk/mobile/shenbian-iphone/shenbian/SuggestViewController.m
+END
+ShopMapInfoViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/app/ttplayer/!svn/ver/7392/trunk/mobile/shenbian-iphone/shenbian/ShopMapInfoViewController.m
+END
+SBLocationView.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/4486/trunk/mobile/shenbian-iphone/shenbian/SBLocationView.h
+END
+SBLocationView.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/4719/trunk/mobile/shenbian-iphone/shenbian/SBLocationView.m
+END
+AlbumViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/4558/trunk/mobile/shenbian-iphone/shenbian/AlbumViewController.h
+END
+AttentionView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8957/trunk/mobile/shenbian-iphone/shenbian/AttentionView.h
+END
+Reachability.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/Reachability.h
+END
+SBPickerViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/SBPickerViewController.h
+END
+AlbumViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/8355/trunk/mobile/shenbian-iphone/shenbian/AlbumViewController.m
+END
+AttentionView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/9192/trunk/mobile/shenbian-iphone/shenbian/AttentionView.m
+END
+Reachability.m
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/app/ttplayer/!svn/ver/6044/trunk/mobile/shenbian-iphone/shenbian/Reachability.m
+END
+SBPickerViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/7392/trunk/mobile/shenbian-iphone/shenbian/SBPickerViewController.m
+END
+HotChannelView.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/5994/trunk/mobile/shenbian-iphone/shenbian/HotChannelView.h
+END
+SubObjectViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SubObjectViewController.h
+END
+SBImageDataSource.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/4558/trunk/mobile/shenbian-iphone/shenbian/SBImageDataSource.h
+END
+HotChannelView.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/6664/trunk/mobile/shenbian-iphone/shenbian/HotChannelView.m
+END
+SubObjectViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/app/ttplayer/!svn/ver/5600/trunk/mobile/shenbian-iphone/shenbian/SubObjectViewController.m
+END
+SBImageDataSource.m
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/app/ttplayer/!svn/ver/4558/trunk/mobile/shenbian-iphone/shenbian/SBImageDataSource.m
+END
+SBAdvertisement.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/7708/trunk/mobile/shenbian-iphone/shenbian/SBAdvertisement.h
+END
+SBAdvertisement.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/7708/trunk/mobile/shenbian-iphone/shenbian/SBAdvertisement.m
+END
+VSEffectLabel.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4343/trunk/mobile/shenbian-iphone/shenbian/VSEffectLabel.h
+END
+OAuthEngine.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/5058/trunk/mobile/shenbian-iphone/shenbian/OAuthEngine.h
+END
+LoadingView.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8867/trunk/mobile/shenbian-iphone/shenbian/LoadingView.h
+END
+VSEffectLabel.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4336/trunk/mobile/shenbian-iphone/shenbian/VSEffectLabel.m
+END
+OAuthEngine.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/5086/trunk/mobile/shenbian-iphone/shenbian/OAuthEngine.m
+END
+AppDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/AppDelegate.h
+END
+LoadingView.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/8940/trunk/mobile/shenbian-iphone/shenbian/LoadingView.m
+END
+PickShopViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/4678/trunk/mobile/shenbian-iphone/shenbian/PickShopViewController.h
+END
+ShopInfoCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/6659/trunk/mobile/shenbian-iphone/shenbian/ShopInfoCellView.h
+END
+AppDelegate.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9594/trunk/mobile/shenbian-iphone/shenbian/AppDelegate.m
+END
+ProvincePickerViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/app/ttplayer/!svn/ver/4506/trunk/mobile/shenbian-iphone/shenbian/ProvincePickerViewController.h
+END
+PickShopViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/9275/trunk/mobile/shenbian-iphone/shenbian/PickShopViewController.m
+END
+ShopInfoCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/app/ttplayer/!svn/ver/7039/trunk/mobile/shenbian-iphone/shenbian/ShopInfoCellView.m
+END
+SBBadge.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/9171/trunk/mobile/shenbian-iphone/shenbian/SBBadge.h
+END
+ProvincePickerViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/app/ttplayer/!svn/ver/8013/trunk/mobile/shenbian-iphone/shenbian/ProvincePickerViewController.m
+END
+hotcity.plist
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/5455/trunk/mobile/shenbian-iphone/shenbian/hotcity.plist
+END
+main.m
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/app/ttplayer/!svn/ver/3808/trunk/mobile/shenbian-iphone/shenbian/main.m
+END
+SBBadge.m
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/9171/trunk/mobile/shenbian-iphone/shenbian/SBBadge.m
+END
+WeiboBindController.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/7392/trunk/mobile/shenbian-iphone/shenbian/WeiboBindController.h
+END
+VSSegmentCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4022/trunk/mobile/shenbian-iphone/shenbian/VSSegmentCell.h
+END
+SBTableViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/6669/trunk/mobile/shenbian-iphone/shenbian/SBTableViewController.h
+END
+WeiboBindController.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/8314/trunk/mobile/shenbian-iphone/shenbian/WeiboBindController.m
+END
+RD.xcconfig
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/3972/trunk/mobile/shenbian-iphone/shenbian/RD.xcconfig
+END
+CancelView.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/CancelView.h
+END
+SBTableViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/app/ttplayer/!svn/ver/8626/trunk/mobile/shenbian-iphone/shenbian/SBTableViewController.m
+END
+VSSegmentCell.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/4022/trunk/mobile/shenbian-iphone/shenbian/VSSegmentCell.m
+END
+CancelView.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/CancelView.m
+END
+SBCommodityList.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9069/trunk/mobile/shenbian-iphone/shenbian/SBCommodityList.h
+END
+SBCommodityList.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SBCommodityList.m
+END
+AttentionListVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9122/trunk/mobile/shenbian-iphone/shenbian/AttentionListVC.h
+END
+SBPhotoScrollViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/4445/trunk/mobile/shenbian-iphone/shenbian/SBPhotoScrollViewController.h
+END
+AttentionListVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9192/trunk/mobile/shenbian-iphone/shenbian/AttentionListVC.m
+END
+MoreViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/7960/trunk/mobile/shenbian-iphone/shenbian/MoreViewController.h
+END
+SBPhotoScrollViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/7590/trunk/mobile/shenbian-iphone/shenbian/SBPhotoScrollViewController.m
+END
+SBUser.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/app/ttplayer/!svn/ver/8957/trunk/mobile/shenbian-iphone/shenbian/SBUser.h
+END
+CacheCenter.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9069/trunk/mobile/shenbian-iphone/shenbian/CacheCenter.h
+END
+PhotoSubmitVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/6593/trunk/mobile/shenbian-iphone/shenbian/PhotoSubmitVC.h
+END
+MoreViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/9589/trunk/mobile/shenbian-iphone/shenbian/MoreViewController.m
+END
+VSSegmentView.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5579/trunk/mobile/shenbian-iphone/shenbian/VSSegmentView.h
+END
+SBUser.m
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/app/ttplayer/!svn/ver/8957/trunk/mobile/shenbian-iphone/shenbian/SBUser.m
+END
+CacheCenter.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9069/trunk/mobile/shenbian-iphone/shenbian/CacheCenter.m
+END
+VSSegmentView.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/5579/trunk/mobile/shenbian-iphone/shenbian/VSSegmentView.m
+END
+PhotoSubmitVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/app/ttplayer/!svn/ver/8003/trunk/mobile/shenbian-iphone/shenbian/PhotoSubmitVC.m
+END
+SBAppVersionControl.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/SBAppVersionControl.h
+END
+SBTriggleButton.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/4735/trunk/mobile/shenbian-iphone/shenbian/SBTriggleButton.h
+END
+BasePickViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/BasePickViewController.h
+END
+SBAppVersionControl.m
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/app/ttplayer/!svn/ver/7194/trunk/mobile/shenbian-iphone/shenbian/SBAppVersionControl.m
+END
+FeedbackViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/8355/trunk/mobile/shenbian-iphone/shenbian/FeedbackViewController.h
+END
+SBTriggleButton.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/5303/trunk/mobile/shenbian-iphone/shenbian/SBTriggleButton.m
+END
+LoginInfo.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/4820/trunk/mobile/shenbian-iphone/shenbian/LoginInfo.h
+END
+PhotoPreviewVC.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/7021/trunk/mobile/shenbian-iphone/shenbian/PhotoPreviewVC.h
+END
+BasePickViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6669/trunk/mobile/shenbian-iphone/shenbian/BasePickViewController.m
+END
+FeedbackViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/8626/trunk/mobile/shenbian-iphone/shenbian/FeedbackViewController.m
+END
+LocationService.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9558/trunk/mobile/shenbian-iphone/shenbian/LocationService.h
+END
+PhotoPreviewVC.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/9280/trunk/mobile/shenbian-iphone/shenbian/PhotoPreviewVC.m
+END
+LoginInfo.m
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/4820/trunk/mobile/shenbian-iphone/shenbian/LoginInfo.m
+END
+CommentCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/5519/trunk/mobile/shenbian-iphone/shenbian/CommentCellView.h
+END
+LocationService.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9558/trunk/mobile/shenbian-iphone/shenbian/LocationService.m
+END
+CommentCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/7039/trunk/mobile/shenbian-iphone/shenbian/CommentCellView.m
+END
+CustomCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/6664/trunk/mobile/shenbian-iphone/shenbian/CustomCellView.h
+END
+CustomCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/app/ttplayer/!svn/ver/6664/trunk/mobile/shenbian-iphone/shenbian/CustomCellView.m
+END
+SBShopInfo.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SBShopInfo.h
+END
+SBShopInfo.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/app/ttplayer/!svn/ver/9258/trunk/mobile/shenbian-iphone/shenbian/SBShopInfo.m
+END
+SBTabBar.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/5465/trunk/mobile/shenbian-iphone/shenbian/SBTabBar.h
+END
+SBTabBar.m
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/5465/trunk/mobile/shenbian-iphone/shenbian/SBTabBar.m
+END
+IntroView.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/4990/trunk/mobile/shenbian-iphone/shenbian/IntroView.h
+END
+map.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/app/ttplayer/!svn/ver/6579/trunk/mobile/shenbian-iphone/shenbian/map.html
+END
+ErrorCenter.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/ErrorCenter.h
+END
+IntroView.m
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/app/ttplayer/!svn/ver/4990/trunk/mobile/shenbian-iphone/shenbian/IntroView.m
+END
+VSTableView.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/4120/trunk/mobile/shenbian-iphone/shenbian/VSTableView.h
+END
+CommodityListViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/4770/trunk/mobile/shenbian-iphone/shenbian/CommodityListViewController.h
+END
+ErrorCenter.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/ErrorCenter.m
+END
+VSTableView.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/app/ttplayer/!svn/ver/4120/trunk/mobile/shenbian-iphone/shenbian/VSTableView.m
+END
+SBButton.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SBButton.h
+END
+CommodityListViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/app/ttplayer/!svn/ver/8106/trunk/mobile/shenbian-iphone/shenbian/CommodityListViewController.m
+END
+SBButton.m
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/app/ttplayer/!svn/ver/4002/trunk/mobile/shenbian-iphone/shenbian/SBButton.m
+END
+CouponInfoCellView.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/4464/trunk/mobile/shenbian-iphone/shenbian/CouponInfoCellView.h
+END
+LoginController.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/7090/trunk/mobile/shenbian-iphone/shenbian/LoginController.h
+END
+CouponInfoViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/CouponInfoViewController.h
+END
+CouponInfoCellView.m
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/app/ttplayer/!svn/ver/4521/trunk/mobile/shenbian-iphone/shenbian/CouponInfoCellView.m
+END
+LoginController.m
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/app/ttplayer/!svn/ver/9438/trunk/mobile/shenbian-iphone/shenbian/LoginController.m
+END
+PictureDetailToolbar.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/7039/trunk/mobile/shenbian-iphone/shenbian/PictureDetailToolbar.h
+END
+CouponInfoViewController.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/app/ttplayer/!svn/ver/7392/trunk/mobile/shenbian-iphone/shenbian/CouponInfoViewController.m
+END
+ShopInfoViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/6826/trunk/mobile/shenbian-iphone/shenbian/ShopInfoViewController.h
+END
+SBAlbum.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/app/ttplayer/!svn/ver/4564/trunk/mobile/shenbian-iphone/shenbian/SBAlbum.h
+END
+PictureDetailToolbar.m
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/app/ttplayer/!svn/ver/7039/trunk/mobile/shenbian-iphone/shenbian/PictureDetailToolbar.m
+END
+SBNavigationController.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/app/ttplayer/!svn/ver/3964/trunk/mobile/shenbian-iphone/shenbian/SBNavigationController.h
+END

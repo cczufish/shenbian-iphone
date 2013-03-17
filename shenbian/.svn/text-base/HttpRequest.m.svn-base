@@ -1,0 +1,544 @@
+//
+//  HttpRequest.m
+//  Personal
+//
+//  Created by MagicYang on 10-3-30.
+//  Copyright 2010 Personal. All rights reserved.
+//
+
+#import "HttpRequest.h"
+#import "HttpRequest+NetworkIndicator.h"
+
+
+#define TIMEOUT_SEC				30.0	// TIME OUT for general request
+#define	POST_TIMEOUT_SEC		30.0	// TIME OUT for POST data
+#define	TIMEOUT_DOMAIN			@"errorTimeOut"
+#define RETRY_INTERVAL			1.0
+
+@implementation HttpRequest
+@synthesize delegate, recievedData, headerFields, statusCode, extraData, timeoutTimer, noCheckResponse;
+@synthesize usingTimeout;
+@synthesize URLRequest;
+@synthesize postEncoding;
+
+
+- (id)init 
+{
+	if((self = [super init]))
+	{
+		recievedData = [[NSMutableData alloc] init];
+		usingTimeout = YES;
+        self.postEncoding = NSUTF8StringEncoding;
+	}
+	return self;
+}
+
+- (id)initWithDelegate:(id)del andExtraData:(id)data
+{
+	if((self = [super init]))
+	{
+		recievedData = [[NSMutableData alloc] init];
+		self.delegate = del;
+		self.extraData = data;
+        self.postEncoding = NSUTF8StringEncoding;
+	}
+	return self;
+}
+
++ (NSString*)stringEncodedWithBase64:(NSString*)str
+{
+	static const char *tbl = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	
+	const char *s = [str UTF8String];
+	int length = [str length];
+	char *tmp = malloc(length * 4 / 3 + 4);
+	
+	int i = 0;
+	int n = 0;
+	char *p = tmp;
+	
+	while (i < length) {
+		n = s[i++];
+		n *= 256;
+		if (i < length) n += s[i];
+		i++;
+		n *= 256;
+		if (i < length) n += s[i];
+		i++;
+		
+		p[0] = tbl[((n & 0x00fc0000) >> 18)];
+		p[1] = tbl[((n & 0x0003f000) >> 12)];
+		p[2] = tbl[((n & 0x00000fc0) >>  6)];
+		p[3] = tbl[((n & 0x0000003f) >>  0)];
+		
+		if (i > length) p[3] = '=';
+		if (i > length + 1) p[2] = '=';
+		
+		p += 4;
+	}
+	
+	*p = '\0';
+	
+	NSString *ret = [NSString stringWithFormat:@"%@", tmp];
+	free(tmp);
+	
+	return ret;
+}
+
++ (NSString*) stringOfAuthorizationHeaderWithUsername:(NSString*)username password:(NSString*)password {
+    NSString *s = @"Basic ";
+    [s autorelease];
+    return [s stringByAppendingString:[HttpRequest stringEncodedWithBase64:[NSString stringWithFormat:@"%@:%@", username, password]]];
+}
+
+- (NSMutableURLRequest*)makeRequest:(NSString*)url 
+{
+	NSString *encodedUrl = (NSString*)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)url, CFSTR("%"), NULL, kCFStringEncodingUTF8);
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:encodedUrl]];
+	[request setCachePolicy:NSURLRequestReloadRevalidatingCacheData];
+	[request setTimeoutInterval:TIMEOUT_SEC];
+	[request setHTTPShouldHandleCookies:YES];
+	[encodedUrl release];
+	return request;
+}
+
+- (NSMutableURLRequest*)makeRequest:(NSString*)url headerFields:(NSDictionary*)header
+{
+	NSMutableURLRequest *request = [self makeRequest:url];
+	if([header count] > 0)
+		[request setAllHTTPHeaderFields:header];
+	return request;
+}
+
+- (NSMutableURLRequest*)makeRequest:(NSString*)url username:(NSString*)username password:(NSString*)password 
+{
+	NSString* authString = [HttpRequest stringOfAuthorizationHeaderWithUsername:username password:password];
+	return [self makeRequest:url headerFields:[NSDictionary dictionaryWithObject:authString forKey:@"Authorization"]];
+}
+
+#pragma mark -
+
+- (void)request:(NSURLRequest*)aRequest
+{
+	self.URLRequest = aRequest;
+	urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+}
+
+- (void)requestGET:(NSString*)url
+{
+	[self requestGET:url useCache:NO];
+}
+
+- (void)requestGET:(NSString *)url useCache:(BOOL)flag {
+	usingCache = flag;
+	[self requestGET:url parameters:nil];
+}
+
+- (void)requestGET:(NSString*)url parameters:(NSDictionary*)params
+{   
+	[self requestGET:url parameters:params headerFields:nil];
+}
+
+- (void)requestGET:(NSString*)url parameters:(NSDictionary*)params username:(NSString*)username password:(NSString*)password
+{
+	[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorShow];
+	NSString* fullUrl = [HttpRequest makeURL:url withParams:params];
+	
+	NSLog(@"GET: %@", fullUrl);
+	
+	self.URLRequest = [self makeRequest:fullUrl username:username password:password];
+	
+	urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+}
+
+- (void)requestGET:(NSString*)url parameters:(NSDictionary*)params headerFields:(NSDictionary*)header
+{
+    [self cancel];
+	NSString* fullUrl = [HttpRequest makeURL:url withParams:params];
+	self.URLRequest = [self makeRequest:fullUrl headerFields:header];
+	
+	// Get cached data if exist
+	NSString *urlKey = [[URLRequest URL] absoluteString];
+	NSData *data = [[HttpRequestCacheCenter sharedInstance] dataForURL:urlKey];
+	BOOL gotCachedData = [data length] > 0;
+	if (gotCachedData) {
+		[recievedData appendData:data];
+		self.URLRequest = nil;
+		self.statusCode = 200;
+		if ([delegate respondsToSelector:@selector(requestSucceeded:)]) {
+			[delegate requestSucceeded:self];
+		}
+	} else {
+		[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorShow];
+		
+		NSLog(@"GET: %@", fullUrl);
+		
+		urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+	}
+}
+
+- (void)requestGET:(NSString*)url username:(NSString*)username password:(NSString*)password 
+{
+	self.URLRequest = [self makeRequest:url username:username password:password];
+	urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+}
+
+- (void)requestPOST:(NSString *)url parameters:(NSDictionary *)params
+{
+    [self requestPOST:url parameters:params username:nil password:nil];
+}
+
+- (void)requestPOST:(NSString*)url parameters:(NSDictionary*)params username:(NSString*)username password:(NSString*)password
+{
+	[self requestPOST:url body:[HttpRequest makeParamtersString:params] username:username password:password];
+}
+
+- (void)requestPOST:(NSString*)url parameters:(NSDictionary*)params headerFields:(NSDictionary*)header
+{
+	NSMutableURLRequest *request = [self makeRequest:url headerFields:header];
+	
+	NSString* body = [HttpRequest makeParamtersString:params];
+	DLog(@"POST: %@ BODY: %@", url, body);
+    [request setHTTPMethod:@"POST"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	if(body) 
+	{
+		NSString *encodedBody = (NSString*)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)body, CFSTR("%"), NULL, kCFStringEncodingUTF8);
+		[request setHTTPBody:[encodedBody dataUsingEncoding:self.postEncoding]];
+		[request setValue:[NSString stringWithFormat:@"%d", [encodedBody length]] forHTTPHeaderField:@"Content-Length"];
+		[encodedBody release];
+	}
+	
+	self.URLRequest = request;
+	
+	urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+}
+
+- (void)requestPOST:(NSString*)url body:(NSString*)body
+{
+	[self requestPOST:url body:body username:nil password:nil];	
+}
+
+- (void)requestPOST:(NSString*)url body:(NSString*)body username:(NSString*)username password:(NSString*)password
+{
+    [self cancel];
+	[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorShow];
+	NSMutableURLRequest *request = nil;
+	if (nil == username && nil == password) {
+		request = [self makeRequest:url];
+	} else {
+		request = [self makeRequest:url username:username password:password];
+	}
+	
+	DLog(@"POST: %@ BODY: %@", url, body);
+    [request setHTTPMethod:@"POST"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	if(body) {
+		[request setHTTPBody:[body dataUsingEncoding:self.postEncoding]];
+		[request setValue:[NSString stringWithFormat:@"%d", [body length]] forHTTPHeaderField:@"Content-Length"];
+    }
+	
+	self.URLRequest = request;
+	
+	urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+	if(self.usingTimeout) 
+		self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:POST_TIMEOUT_SEC target:self selector:@selector(timerFireMethod:) userInfo:nil repeats:NO];
+	
+}
+
+#pragma mark -
+
+- (void)failedWithError:(NSError*)error
+{
+	[urlConnection cancel];
+	[urlConnection release]; urlConnection = nil;
+	[self.timeoutTimer invalidate]; self.timeoutTimer = nil;
+	
+	[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorHide];
+	
+	if ([delegate respondsToSelector:@selector(requestFailed:error:)])
+		[delegate requestFailed:self error:error];
+}
+
+- (void)timerFireMethod:(NSTimer*)theTimer
+{
+	NSError *timeoutError = [NSError errorWithDomain:TIMEOUT_DOMAIN code:-1001 userInfo:nil];
+	if([recievedData length] > 0 && urlConnection != nil)
+	{
+		self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:POST_TIMEOUT_SEC target:self selector:@selector(timerFireMethod:) userInfo:nil repeats:NO];
+	}
+	else
+	{
+		[self failedWithError:timeoutError];
+		self.timeoutTimer = nil;
+	}
+}
+
+- (void)cancel
+{
+	[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorHide];
+	
+	[urlConnection cancel];
+	[urlConnection release]; urlConnection = nil;
+	self.recievedData = [[NSMutableData alloc] init];
+    self.URLRequest = nil;
+	if(self.timeoutTimer)
+	{
+		[self.timeoutTimer invalidate];
+		self.timeoutTimer = nil;
+	}
+}
+
+- (void)requestMethod:(NSString*)method url:(NSString*)url parameters:(NSDictionary*)params
+{
+	NSMutableURLRequest *request = nil;
+	request = [self makeRequest:url];
+    [request setHTTPMethod:method];
+	
+	self.URLRequest = request;
+	
+	urlConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response 
+{
+	if(([response isKindOfClass:[NSHTTPURLResponse class]])) {
+		self.statusCode = [(NSHTTPURLResponse*)response statusCode];
+		self.headerFields = [(NSHTTPURLResponse*)response allHeaderFields];
+	}
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
+{
+    [recievedData appendData:data];
+	
+	// caculate the recived data percent for delegate
+	if([delegate respondsToSelector:@selector(request:recivedDataPercent:)]) {
+		CGFloat length_got = [recievedData length];
+		CGFloat length_total = [[self.headerFields objectForKey:@"Content-Length"] floatValue];
+		CGFloat percent = length_got / length_total;
+		[delegate request:self recivedDataPercent:percent];
+	}
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection 
+{
+	[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorHide];
+	
+	[self.timeoutTimer invalidate]; self.timeoutTimer = nil;
+	
+	[urlConnection release]; urlConnection = nil;
+	
+	if ([delegate respondsToSelector:@selector(requestSucceeded:)]) {
+		[delegate requestSucceeded:self];
+	}
+	
+	if (usingCache) {
+		NSString *urlKey = [[URLRequest URL] absoluteString];
+		[[HttpRequestCacheCenter sharedInstance] cacheData:self.recievedData forURL:urlKey];
+	}
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError*) error 
+{
+	[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorHide];
+	
+	[self.timeoutTimer invalidate]; self.timeoutTimer = nil;
+	
+	[urlConnection release]; urlConnection = nil;
+
+	if ([delegate respondsToSelector:@selector(requestFailed:error:)])
+		[delegate requestFailed:self error:error];
+}
+
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse
+{
+	if (delegate && [delegate respondsToSelector:@selector(request:willSendRequest:redirectResponse:)])
+		[delegate request:self willSendRequest:request redirectResponse:redirectResponse];
+	return request;
+}
+
++ (NSString*)makeURL:(NSString*)baseUrl withParams:(NSDictionary*)params
+{
+	NSString* stringOfParameters = [HttpRequest makeParamtersString:params];
+	if (nil == stringOfParameters)
+		return baseUrl;
+	
+	return [NSString stringWithFormat:@"%@?%@", baseUrl, stringOfParameters];
+}
+
++ (NSString*)makeParamtersString:(NSDictionary*)parameters
+{
+	if (nil == parameters || [parameters count] == 0)
+		return nil;
+	
+	NSMutableString* stringOfParamters = [[[NSMutableString alloc] init] autorelease];
+	NSEnumerator *keyEnumerator = [parameters keyEnumerator];
+	id key = nil;
+	while ((key = [keyEnumerator nextObject])) 
+	{
+		[stringOfParamters appendFormat:@"%@=%@&", key, [parameters valueForKey:key]];
+	}
+	
+	// Delete last character of '&'
+	NSRange lastCharRange = {[stringOfParamters length] - 1, 1};
+	[stringOfParamters deleteCharactersInRange:lastCharRange];
+	return stringOfParamters;
+}
+
++ (NSString*)makeURL:(NSString*)baseUrl withOrderedParams:(NSArray*)params
+{
+	if([params count] == 0)
+		return baseUrl;
+	
+	NSMutableString* stringOfParameters = [NSMutableString string];
+	for(HttpRequestParameter* aParam in params)
+	{
+		if(aParam.value != nil)
+			[stringOfParameters appendFormat:@"%@=%@&", aParam.name, aParam.value];
+	}
+	
+	NSRange lastCharRange = {[stringOfParameters length] - 1, 1};
+	[stringOfParameters deleteCharactersInRange:lastCharRange];
+	
+	return [NSString stringWithFormat:@"%@?%@", baseUrl, stringOfParameters];
+}
+
++ (NSString*)makeBody:(NSDictionary*)params
+{
+	if (nil == params || [params count] == 0)
+		return nil;
+	
+	NSMutableString *postString = [[[NSMutableString alloc] init] autorelease];
+	NSArray* allKeys = [params allKeys];
+	NSUInteger allKeysCount = [allKeys count];
+	NSString* paramName = nil;
+	for(NSUInteger i = 0; i < allKeysCount - 1; ++i)
+	{
+		paramName = [allKeys objectAtIndex:i];
+		[postString appendFormat:@"%@=%@&", paramName, [params objectForKey:paramName]];
+	}
+	
+	// Add last parameter
+	paramName = [allKeys lastObject];
+	[postString appendFormat:@"%@=%@", paramName, [params objectForKey:paramName]];
+	
+	return postString;
+}
+
+
+- (void)dealloc 
+{
+	self.delegate = nil;
+	self.extraData = nil;
+	if(urlConnection)
+	{
+		[HttpRequest setNetworkActivityIndicator:NetworkActivityIndicatorHide];
+		[urlConnection cancel];
+		[urlConnection release]; urlConnection = nil;
+	}
+	
+	if(self.timeoutTimer)
+	{
+		[self.timeoutTimer invalidate];
+		self.timeoutTimer = nil;
+	}
+	
+	[recievedData release]; recievedData = nil;
+	[headerFields release];
+	self.URLRequest = nil;
+	[super dealloc];
+}
+
+@end
+
+
+#pragma mark -
+// ======================================================================
+
+//	Class: HttpRequestParameter
+
+// ======================================================================
+
+@implementation HttpRequestParameter
+
+@synthesize name;
+@synthesize value;
+
++ (id)parameterWithName:(NSString*)_name value:(id)_value
+{
+	HttpRequestParameter* parameter = [[[HttpRequestParameter alloc] init] autorelease];
+	parameter.name = _name;
+	parameter.value = _value;
+	return parameter;
+}
+
+-(void)dealloc
+{
+	self.name = nil;
+	self.value = nil;
+	[super dealloc];
+}
+
+@end
+
+
+
+#pragma mark -
+// ======================================================================
+
+//	Class: HttpRequestCacheCenter
+
+// ======================================================================
+
+static HttpRequestCacheCenter *instance = nil;
+
+@implementation HttpRequestCacheCenter
+
++ (id)allocWithZone:(NSZone *)zone {
+	NSAssert(instance == nil, @"Duplicate alloc a singleton class");
+	return [super allocWithZone:zone];
+}
+
+- (id)init {
+	if ((self = [super init])) {
+		dataDictionary = [NSMutableDictionary new];
+	}
+	return self;
+}
+
++ (HttpRequestCacheCenter *)sharedInstance {
+	@synchronized([HttpRequestCacheCenter class]) {
+		if (!instance) {
+			instance = [[HttpRequestCacheCenter alloc] init];
+		}
+	}
+	return instance;
+}
+
+- (void)dealloc {
+	[dataDictionary release];
+	[super dealloc];
+}
+
+- (void)cacheData:(NSData *)data forURL:(NSString *)url {
+	if ([[dataDictionary allKeys] count] >= 500) {
+		[dataDictionary removeAllObjects];
+	}
+	if (data) {
+        [dataDictionary setObject:data forKey:url];
+    }
+	
+}
+
+- (NSData *)dataForURL:(NSString *)url {
+	return [dataDictionary objectForKey:url];
+}
+
+- (void)distoryCacheData {
+    [dataDictionary removeAllObjects];
+}
+
+@end
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>北京</key>
+	<integer>131</integer>
+    <!--
+	<key>上海</key>
+	<integer>289</integer>
+	<key>杭州</key>
+	<integer>179</integer>
+	<key>南京</key>
+	<integer>315</integer>
+	<key>苏州</key>
+	<integer>224</integer>
+	<key>无锡</key>
+	<integer>317</integer>
+	<key>广州</key>
+	<integer>257</integer>
+	<key>深圳</key>
+	<integer>340</integer>
+	<key>武汉</key>
+	<integer>218</integer>
+	<key>重庆</key>
+	<integer>132</integer>
+	<key>成都</key>
+	<integer>75</integer>
+	<key>长春</key>
+	<integer>53</integer>
+	<key>天津</key>
+	<integer>332</integer>
+	<key>沈阳</key>
+	<integer>58</integer>
+	<key>哈尔滨</key>
+	<integer>48</integer>
+	<key>西安</key>
+	<integer>233</integer>
+	<key>济南</key>
+	<integer>288</integer>
+	<key>青岛</key>
+	<integer>236</integer>
+	<key>厦门</key>
+	<integer>194</integer>
+	<key>大连</key>
+	<integer>167</integer>
+     -->
+</dict>
+</plist>

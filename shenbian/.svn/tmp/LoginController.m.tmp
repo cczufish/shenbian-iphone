@@ -1,0 +1,739 @@
+//
+//  LoginController.m
+//  shenbian
+//
+//  Created by MagicYang on 11-05-09.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#import <QuartzCore/QuartzCore.h>
+#import "LoginController.h"
+#import "HttpRequest+Statistic.h"
+#import "Utility.h"
+#import "VSTextFieldCell.h"
+#import "SBJsonParser.h"
+#import "SBPopupTextField.h"
+#import "Notifications.h"
+#import "AlertCenter.h"
+#import "UIAdditions.h"
+#import "SignupController.h"
+#import "CacheCenter.h"
+#import "SBApiEngine.h"
+#import "UIImageView+DispatchLoad.h"
+#import "WeiboBindController.h"
+#import "StatService.h"
+
+
+@interface LoginController(Private)
+- (void)dismissKeyboard;
+- (void)presentKeyboard;
+- (BOOL)isLoginOnBackground;
+@end
+
+@implementation LoginController
+
+static LoginController *instance = nil;
+
+@synthesize delegate, authSuccessSEL, loginSuccessSEL, checkActivityFinishedSEL;
+@synthesize username, password, verifyCode;
+@synthesize bdVerify, bdStoken, bdTime;
+@synthesize nickName;
+@synthesize isJustAuth;
+@synthesize isActived = _isActived, isWeiboBind = _isWeiboBind, isWeiboSync = _isWeiboSync;
+@synthesize verifyImage;
+@synthesize signupWindow;
+@synthesize verifyButton;
+
++ (id)allocWithZone:(NSZone *)zone {
+	NSAssert(instance == nil, @"Duplicate alloc a singleton class");
+	
+	return [super allocWithZone:zone];
+}
+
++ (LoginController *)sharedInstance {
+	@synchronized([LoginController class]) {
+		if (!instance) {
+			instance = [[LoginController alloc] init];
+		}
+	}
+	return instance;
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        loginView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 460)];
+        UIImageView *bg = [[UIImageView alloc] initWithImage:PNGImage(@"bg")];
+        bg.frame = CGRectMake(0, 0, 320, 460);
+        UIImageView *topBar = [[UIImageView alloc] initWithImage:PNGImage(@"navigationbar_bg")];
+        topBar.userInteractionEnabled = YES;
+        topBar.frame = CGRectMake(0, 0, 320, 44);
+        
+        UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelBtn setFrame:CGRectMake(10, 7, 51, 30)];
+        UIImage *img0 = [PNGImage(@"button_navigation_normal_0") stretchableImageWithLeftCapWidth:20 topCapHeight:0];
+        UIImage *img1 = [PNGImage(@"button_navigation_normal_1") stretchableImageWithLeftCapWidth:20 topCapHeight:0];
+        [cancelBtn setBackgroundImage:img0 forState:UIControlStateNormal];
+        [cancelBtn setBackgroundImage:img1 forState:UIControlStateHighlighted];
+        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        cancelBtn.titleLabel.font = FontWithSize(13);
+        [cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [cancelBtn addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+        [topBar addSubview:cancelBtn];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 7, 120, 30)];
+        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.font = FontWithSize(20);
+        titleLabel.textColor = [UIColor whiteColor];
+        titleLabel.textAlignment = UITextAlignmentCenter;
+        titleLabel.shadowOffset = CGSizeMake(0, -1);
+        titleLabel.shadowColor = [UIColor blackColor];
+        titleLabel.text = @"登录";
+        [topBar addSubview:titleLabel];
+        [titleLabel release];
+        
+        tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 46, 320, 416) style:UITableViewStyleGrouped];
+        tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        tableView.backgroundColor = [UIColor clearColor];
+        tableView.scrollEnabled = NO;
+        
+        UIButton *hiddenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        hiddenBtn.frame = CGRectMake(0, 110, 320, 300);
+        [hiddenBtn addTarget:self action:@selector(dismissKeyboard) forControlEvents:UIControlEventTouchUpInside];
+        tableView.tableFooterView = hiddenBtn;
+        
+		
+		//	login button
+		UIButton *loginBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		[loginBtn setFrame:CGRectMake(187, 0, 123, 32)];
+		//    [loginBtn setTitle:@"登    录" forState:UIControlStateNormal];
+		[loginBtn setImage:PNGImage(@"signin_login_normal") forState:UIControlStateNormal];
+		[loginBtn setImage:PNGImage(@"signin_login_pressed") forState:UIControlStateHighlighted];
+		[loginBtn addTarget:self action:@selector(login:) forControlEvents:UIControlEventTouchUpInside];
+		[hiddenBtn addSubview:loginBtn];
+		
+		//	signup button
+		UILabel *signupLabel = [[UILabel alloc] initWithFrame:vsr(16, 0, 160, 32)];
+		signupLabel.text = @">>注册百度账号";
+		signupLabel.backgroundColor = [UIColor clearColor];
+		signupLabel.font = FontWithSize(13.0f);
+		
+		[hiddenBtn addSubview:signupLabel];
+		[signupLabel release];
+		
+		UIButton *signupButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		[signupButton setFrame:vsr(10, 0, 120, 33)];
+		signupButton.backgroundColor = [UIColor clearColor];
+		[signupButton addTarget:self action:@selector(showSignupView) forControlEvents:UIControlEventTouchUpInside];
+		[hiddenBtn addSubview:signupButton];
+		
+		UIImageView * navShadow = [[UIImageView alloc] initWithFrame:vsr(0, 44, 320, 5)];
+		navShadow.image = PNGImage(@"navigationbar_shadow");
+		
+        [loginView addSubview:bg];
+        [loginView addSubview:topBar];
+        [loginView addSubview:tableView]; 
+		[loginView addSubview:navShadow];
+        
+		[navShadow release];
+        [topBar release];
+        [bg release];
+		
+        weiboLoginButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+        weiboLoginButton.frame = CGRectMake(12, 45, 295, 31);
+        [weiboLoginButton setImage:PNGImage(@"button_weibologin_0") forState:UIControlStateNormal];
+        [weiboLoginButton setImage:PNGImage(@"button_weibologin_1") forState:UIControlStateHighlighted];
+        [weiboLoginButton addTarget:self action:@selector(weiboLogin) forControlEvents:UIControlEventTouchUpInside];
+        
+		signupWindow = [[SignupController alloc] init];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [loginView release];
+	[tableView release];
+	[loginViewTableView release];
+	[username release];
+	[password release];
+	[verifyCode release];
+	[bdVerify release];
+	[bdStoken release];
+	[bdTime release];
+	[verifyImage release];
+	[verifyImageView release];
+	[signupWindow release];
+	[verifyButton release];
+	
+    [super dealloc];
+}
+
+- (BOOL)isLogin {
+	return [SBApiEngine getBDUSSCookie] && _isActived;
+}
+
+- (void)destroySession {
+    [SBApiEngine deleteBDUSSCookie];
+    _isActived = NO;
+}
+
+- (void)showBindViewWithNickname:(NSString *)nickname andImageLink:(NSString *)link
+{
+	self.verifyCode  = nil;
+	self.bdVerify    = nil;
+	self.verifyImage = nil;
+	self.nickName    = nickname;
+    
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(13, 23, 50, 50)];
+    [imageView setImage:PNGImage(@"user_default")];
+    [imageView setImageFromUrl:link];
+    CALayer * layer = [imageView layer];  
+    [layer setMasksToBounds:YES];  
+    [layer setCornerRadius:6.0];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(75, 13, 230, 70)];
+    label.numberOfLines = 0;
+    label.font = FontWithSize(14);
+    label.backgroundColor = [UIColor clearColor];
+    label.text = [NSString stringWithFormat:@"%@,欢迎来到百度身边.为方便您今后使用百度产品,请绑定一个百度帐号", nickname];
+    label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+    
+    [header addSubview:imageView];
+    [header addSubview:label];
+    [imageView release];
+    [label release];
+    
+    // 隐藏按钮, 控制键盘dismiss
+    UIButton *hiddenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    hiddenBtn.frame = header.frame;
+    [hiddenBtn addTarget:self action:@selector(dismissKeyboard) forControlEvents:UIControlEventTouchUpInside];
+    [header addSubview:hiddenBtn];
+    
+    tableView.tableHeaderView = header;
+    [weiboLoginButton removeFromSuperview];
+	[tableView reloadData];
+	
+    [[[UIApplication sharedApplication] keyWindow] addSubview:loginView];
+    loginView.top = 480;
+    [UIView beginAnimations:@"" context:NULL];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.3];
+    loginView.top = 20;
+    [UIView commitAnimations];
+}
+
+- (void)showSignupView {
+	Stat(@"login_clickreg");
+    // 此处不销毁delegate,注册后激活有Callback
+    id del = self.delegate;
+	[self hideLoginView];
+    self.delegate = del;
+    if (self.nickName) {    // Used for 微博绑定
+        [signupWindow showSignupViewWithNickname:nickName];
+    } else {
+        [signupWindow showSignupView];
+    }
+}
+
+- (void)showLoginView {
+	Stat(@"login_into");
+	self.verifyCode = nil;
+	self.bdVerify = nil;
+	self.verifyImage = nil;
+	
+    tableView.tableHeaderView = nil;
+    [tableView.tableFooterView addSubview:weiboLoginButton];
+    
+	[tableView reloadData];
+	
+    [[[UIApplication sharedApplication] keyWindow] addSubview:loginView];
+    loginView.top = 480;
+    [UIView beginAnimations:@"" context:NULL];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.3];
+    loginView.top = 20;
+    [UIView commitAnimations];
+}
+
+- (void)hideLoginView {
+    self.delegate = nil;
+    self.loginSuccessSEL = nil;
+    [self dismissKeyboard];
+    [UIView beginAnimations:@"" context:NULL];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(hideLoginViewAnimationStop)];
+    loginView.top = 480;
+    [UIView commitAnimations];
+}
+
+- (void)hideLoginViewWithNotification
+{
+    [self hideLoginView];
+    [Notifier postNotificationName:kLoginCancelled object:nil];
+}
+
+- (void)hideLoginViewAnimationStop {
+    [loginView removeFromSuperview];
+}
+
+- (void)dismissKeyboard {
+//	for (SBTextFieldCell *cell in [tableView visibleCells]) {
+//		UITextField *tf = [cell valueForKey:@"_textField"];
+//		NSLog(@"%@=%d", tf, [tf isFirstResponder]);
+//	}
+	VSTextFieldCell *cell = (VSTextFieldCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+	[cell.textField resignFirstResponder];
+	cell = (VSTextFieldCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+	[cell.textField resignFirstResponder];
+	if (verifyImage) {
+		cell = (VSTextFieldCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+		[cell.textField resignFirstResponder];
+	}
+	
+	cell = (VSTextFieldCell *)[loginViewTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+	[cell.textField resignFirstResponder];
+	cell = (VSTextFieldCell *)[loginViewTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+	[cell.textField resignFirstResponder];
+	if (verifyImage) {
+		cell = (VSTextFieldCell *)[loginViewTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+		[cell.textField resignFirstResponder];
+	}
+}
+
+- (void)presentKeyboard {
+    VSTextFieldCell *cell = (VSTextFieldCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+	[cell.textField becomeFirstResponder];
+}
+
+- (BOOL)isLoginOnBackground {
+    return [loginView superview] == nil;
+}
+
+- (void)weiboLogin
+{
+	Stat(@"login_clicksina");
+    [self dismissKeyboard];
+    [[WeiboBindController sharedInstance] showBindView];
+}
+
+// 登录
+- (void)login:(id)sender {
+	// Check in UI display mode
+	if (![self isLoginOnBackground]) {
+		if (!username || [username length] == 0) {
+			Alert(nil, @"请输入用户名");return;
+		}
+		if (!password || [password length] == 0) {
+			Alert(nil, @"请输入密码");return;
+		}
+		if (verifyImage && (!verifyCode || [verifyCode length] == 0)) {
+			Alert(nil, @"请输入验证码");return;
+		}
+		[self dismissKeyboard];
+	}
+	
+	// http://123.125.69.198:8040/passport/?login
+	request = [[HttpRequest alloc] initWithDelegate:self andExtraData:NUM(LoginRequest)];
+    NSString *pwd = [Utility stringEncodedWithBase64:password]; // password encoded with Base64
+	NSMutableDictionary *param = [NSMutableDictionary dictionary];
+	[param setObject:username forKey:@"username"];
+	[param setObject:pwd forKey:@"password"];
+	[param setObject:NUM(1) forKey:@"crypttype"];
+	[param setObject:NUM(0) forKey:@"isphone"];
+    [param setObject:NUM(3) forKey:@"login_type"]; // BDUSS有效期30天
+    [param setObject:NUM(1) forKey:@"appid"];
+    [param setObject:TPL forKey:@"tpl"];
+    
+	if (nil != self.bdVerify && ![self.bdVerify isEqualToString:@""]) {
+		//	验证码字段
+		[param setObject:bdVerify forKey:@"vcodestr"];
+		[param setObject:verifyCode forKey:@"verifycode"];
+	}
+	
+    // Begin:计算sig
+    NSArray *keys = [param allKeys];
+    NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSMutableString *strQuery = [NSMutableString string];
+    for (NSString *key in sortedKeys) {
+        NSString *value = [param objectForKey:key];
+        [strQuery appendFormat:@"%@=%@&", key, value];
+    }
+    [strQuery appendFormat:@"sign_key=%@", SIGN_KEY];
+    
+	NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *sig = [Utility stringEncodedWithMD5:strQuery withEncoding:enc];
+    // End:计算sig
+    
+    [param setObject:sig forKey:@"sig"];
+    request.postEncoding = enc;
+	[request requestPOST:LOGIN_URL parameters:param];
+}
+
+// 检查是否激活
+- (void)isActiveRequest
+{
+    if (activeRequest) {
+        return; // 如果正在激活，则不作检查
+    }
+    
+	// http://client.shenbian.com/iphone/getUserId
+    CancelRequest(checkActiveRequest);
+	NSString *url = [NSString stringWithFormat:@"%@/getUserId", ROOT_URL];
+	checkActiveRequest = [[HttpRequest alloc] initWithDelegate:self andExtraData:NUM(CheckActiveRequest)];
+	[checkActiveRequest requestGET:url useStat:YES];
+}
+
+// 激活
+- (void)activeWithNickname:(NSString *)nickname 
+{
+    // http://client.shenbian.com/iphone/activate
+    NSString *url = [NSString stringWithFormat:@"%@/activate", ROOT_URL];
+    activeRequest = [[HttpRequest alloc] initWithDelegate:self andExtraData:NUM(ActiveRequest)];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            nickname, @"name", 
+                            IMEI, @"imei", nil];
+    [activeRequest requestPOST:url parameters:params useStat:YES];
+}
+
+- (void)getVerifyCode {
+	NSString *url = [NSString stringWithFormat:@"%@%@", GET_CHECK_IMAGE_URL, bdVerify];
+	request = [[HttpRequest alloc] initWithDelegate:self andExtraData:NUM(VerifyCodeRequest)];
+	[request requestGET:url useCache:NO];
+}
+
+- (void)inputVerifyCode {	
+
+	if (nil == verifyButton) {
+		self.verifyButton = [[[UIButton alloc] initWithFrame:vsr(200, 2, 100, 40)] autorelease];
+		[verifyButton addTarget:self
+						 action:@selector(reloadVerifyCode)
+			   forControlEvents:UIControlEventTouchUpInside];
+	}
+	
+	[verifyButton setImage:verifyImage forState:UIControlStateNormal];
+
+	[tableView reloadData];
+}
+
+- (void)reloadVerifyCode {
+	self.verifyImage = nil;
+	[self getVerifyCode];
+}
+
+- (void)autoLogin {
+	self.verifyCode = nil;
+	self.bdVerify = nil;
+	self.verifyImage = nil;
+	
+	self.username = [CacheCenter sharedInstance].username;
+	if ([SBApiEngine getBDUSSCookie]) {
+		[self isActiveRequest];
+	}
+}
+
+- (void)logout {
+	[self destroySession];
+	self.password = nil;
+    _isWeiboBind  = NO;
+    [[CacheCenter sharedInstance] recordBDUSS:nil];
+	[tableView reloadData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kLogoutSucceeded object:nil];
+}
+
+- (void)cancel:(id)sender 
+{
+	Stat(@"login_cancel");
+	[self hideLoginViewWithNotification];
+}
+
+- (void)authSuccessed
+{
+    [[CacheCenter sharedInstance] recordUsername:username];
+    
+    if ([delegate respondsToSelector:self.authSuccessSEL]) {
+        [delegate performSelector:self.authSuccessSEL withObject:self];
+    }
+}
+
+- (void)loginSuccessed
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSucceeded object:nil];
+    
+    if ([delegate respondsToSelector:self.loginSuccessSEL]) {
+        [delegate performSelector:self.loginSuccessSEL withObject:self];
+    }
+}
+
+
+#pragma mark -
+#pragma mark Table view data source
+- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+	return verifyImage ? 3 : 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *TextFieldCell = @"TextFieldCell";
+    
+    UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:TextFieldCell];
+	if (cell == nil) {
+		cell = [[[VSTextFieldCell alloc] initWithDelegate:self reuseIdentifier:TextFieldCell] autorelease];
+		((VSTextFieldCell *)cell).label.font = FontWithSize(16);
+		((VSTextFieldCell *)cell).textField.font = FontWithSize(16);
+		((VSTextFieldCell *)cell).textField.textColor = [UIColor colorWithRed:0.282 green:0.38 blue:0.565 alpha:1];
+		((VSTextFieldCell *)cell).textField.delegate = self;
+		((VSTextFieldCell *)cell).textField.enablesReturnKeyAutomatically = YES;
+		((VSTextFieldCell *)cell).textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+	}
+	switch (indexPath.row) {
+		case 0: {
+			((VSTextFieldCell *)cell).label.text = @"用户名";
+			((VSTextFieldCell *)cell).textField.text = username;
+			((VSTextFieldCell *)cell).textField.returnKeyType = UIReturnKeyNext;
+			((VSTextFieldCell *)cell).textField.tag = UsernameField;
+//			mUsernameTextField = ((SBTextFieldCell *)cell).textField;
+		} break;
+		case 1: {
+			((VSTextFieldCell *)cell).label.text = @"密码";
+			((VSTextFieldCell *)cell).textField.text = password;
+			((VSTextFieldCell *)cell).textField.secureTextEntry = YES;
+			((VSTextFieldCell *)cell).textField.returnKeyType = verifyImage ? UIReturnKeyNext : UIReturnKeyDone;
+			((VSTextFieldCell *)cell).textField.tag = PasswordField;
+//			mPasswordTextField = ((SBTextFieldCell *)cell).textField;
+		} break;
+		case 2: {
+			((VSTextFieldCell *)cell).label.text = @"验证码";
+			CGRect rect = ((VSTextFieldCell *)cell).textField.frame;
+			((VSTextFieldCell *)cell).textField.frame = CGRectMake(rect.origin.x, rect.origin.y, 80, rect.size.height);
+//			((SBTextFieldCell *)cell).textField.text = verifyCode;
+			[cell addSubview:self.verifyButton];
+			((VSTextFieldCell *)cell).textField.returnKeyType = UIReturnKeyDone;
+			((VSTextFieldCell *)cell).textField.clearButtonMode = UITextFieldViewModeNever;
+			((VSTextFieldCell *)cell).textField.tag = VerifyField;
+//			mVerifyCodeTextField = ((SBTextFieldCell *)cell).textField;
+//			[cell.contentView addSubview:verifyImageView];
+		} break;
+	}
+	
+    return cell;
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+	[self dismissKeyboard];
+}
+
+
+#pragma mark -
+#pragma mark UITextFieldDelegate
+- (void)fillContentWithTextField:(UITextField *)textField {
+    if (textField.tag == UsernameField) {
+		self.username = textField.text;
+	} else if (textField.tag == PasswordField) {
+		self.password = textField.text;
+	} else {
+		self.verifyCode = textField.text;
+	}
+}
+
+- (void)searchTextChanged:(UITextField *)textField {
+    [self fillContentWithTextField:textField];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self fillContentWithTextField:textField];
+    
+	if (textField.returnKeyType == UIReturnKeyDone) {
+		[self login:nil];
+	} else {
+		if (textField.tag == UsernameField) {
+			VSTextFieldCell *cell = (VSTextFieldCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+			[cell.textField becomeFirstResponder];
+		} else {
+			VSTextFieldCell *cell = (VSTextFieldCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+			[cell.textField becomeFirstResponder];			
+		}
+	}
+	return YES;
+}
+
+- (void)doActiveReferFinished:(NSDictionary *)dict
+{
+    // Get user id for CurrentAccount used in PhotoDetail
+    SBUser *user = [SBUser new];
+    user.uid = [dict objectForKey:@"u_fcrid"];
+    CurrentAccount = user;
+    [user release];    
+    _isWeiboBind = [[dict objectForKey:@"sinabind"] boolValue];
+    _isWeiboSync = [[dict objectForKey:@"sinasync"] boolValue];
+    _isActived   = YES;
+    
+    [self loginSuccessed];
+    
+    if ([delegate respondsToSelector:self.checkActivityFinishedSEL]) {
+        [delegate performSelector:self.checkActivityFinishedSEL withObject:self];
+    }
+    
+    [self hideLoginViewWithNotification];
+}
+
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate
+// 激活
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([alertView cancelButtonIndex] != buttonIndex) {
+        CancelRequest(activeRequest);
+        SBPopupTextField *ptf = (SBPopupTextField *)alertView;
+        UITextField *tf = [ptf textField];
+        [self activeWithNickname:tf.text];
+    }
+}
+
+
+#pragma mark -
+#pragma mark HttpRequestDelegate
+- (void)requestSucceeded:(HttpRequest*)req {
+	NSDictionary *dict = [Utility parseData:req.recievedData];
+    int error = [[dict objectForKey:@"errno"] intValue];
+    int reqType = [req.extraData intValue];
+    if (reqType == LoginRequest) {  // 登录
+        if (error == 0) {
+            [[CacheCenter sharedInstance] recordBDUSS:[dict objectForKey:@"bduss"]];
+            if (!isJustAuth) {
+                [self isActiveRequest];
+            }
+            [self authSuccessed];
+			self.verifyCode = nil;
+			self.bdVerify = nil;
+			self.verifyImage = nil;
+        } else {
+            if (![self isLoginOnBackground]) {
+				NSString *session = [NSString stringWithFormat:@"login_clicklogin?errcode=%d", error];
+				Stat(session);
+				
+                NSString* errorTitle = @"登录失败";
+                NSMutableString* errorMsg = [NSMutableString string];
+                switch (error) {
+                    case 1: [errorMsg setString:@"用户名格式错误"];break;
+                    case 2: [errorMsg setString:@"用户不存在"];break;
+                    case 4: [errorMsg setString:@"登录密码错误"];break;
+                    case 6: [errorMsg setString:@"验证码不匹配，请重新输入验证码"];break;
+                    case 16: [errorMsg setString:@"对不起，您现在无法登陆"];break;
+                    case 257: {
+                        [errorMsg setString:@"请输入验证码"];
+                    } break;
+                    default: {
+                        NSString *msg = [NSString stringWithFormat:@"未知错误，代码:%d", error];
+                        [errorMsg setString:msg];
+                    }
+                }
+                Alert(errorTitle, errorMsg);
+                if ([[dict objectForKey:@"needvcode"] intValue] == 1) {
+                    self.bdVerify = [dict objectForKey:@"vcodestr"];
+                    [self getVerifyCode];
+                } else {
+                    self.bdVerify = nil;
+                    self.verifyCode = nil;
+                    self.verifyImage = nil;
+                    [tableView reloadData];
+                }
+            }
+        }
+        Release(request);
+        isJustAuth = NO;
+    } else if (reqType == CheckActiveRequest) {   // 检查激活
+        Release(checkActiveRequest);
+        if (error == 0) {
+            [self doActiveReferFinished:dict];
+        } else {
+            if (![self isLoginOnBackground]) {
+                switch (error) {
+                    case 21001: Alert(@"激活检查", @"系统错误");break;
+                    case 21003: Alert(@"激活检查", @"用户未登录");break;
+                    case 21004: {   // 未激活用户                    
+                        if (nickName) {    // 微博绑定的检查，需自动激活
+                            [self activeWithNickname:self.nickName];
+                            self.nickName = nil;
+                        } else {
+                            SBPopupTextField *alert = [[SBPopupTextField alloc] initWithTitle:@"请填写昵称，激活百度身边（长度2-8位)"
+                                                                                      message:@"\n"
+                                                                                     delegate:self
+                                                                            cancelButtonTitle:@"取消"
+                                                                            otherButtonTitles:@"激活", nil];
+                            [alert show];
+                            [alert release];
+                        }
+                    } break;
+                    default: {
+                        NSString *msg = [NSString stringWithFormat:@"未知错误，代码:%d", error];
+                        Alert(@"激活检查", msg);break;
+                    }
+                }
+            }
+            if ([delegate respondsToSelector:self.checkActivityFinishedSEL]) {
+                [delegate performSelector:self.checkActivityFinishedSEL withObject:self];
+            }
+        }
+	}  else if (VerifyCodeRequest == reqType) { // 检查验证码
+		UIImage* image = [[UIImage alloc] initWithData:req.recievedData];
+		self.verifyImage = image;
+		[image release];
+		[self inputVerifyCode];
+		Release(request);
+	} else {    // 激活
+        Release(activeRequest);
+        if (error == 0) {
+            [self doActiveReferFinished:dict];
+        } else {
+            if (![self isLoginOnBackground]) {
+                switch (error) {
+                    case 21001: Alert(@"激活失败", @"系统错误");break;
+                    case 21003: Alert(@"激活失败", @"用户未登录");break;
+                    case 21005: {
+                        SBPopupTextField *alert = [[SBPopupTextField alloc] initWithTitle:@"昵称非法，请重新输入"
+                                                                                  message:@"\n"
+                                                                                 delegate:self
+                                                                        cancelButtonTitle:@"取消"
+                                                                        otherButtonTitles:@"激活", nil];
+                        [alert show];
+                        [alert release];
+                    } break;
+                    default: {
+                        NSString *msg = [NSString stringWithFormat:@"未知错误，Code:%d", error];
+                        Alert(@"激活失败", msg);break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (void)requestFailed:(HttpRequest*)req error:(NSError*)error {
+    int reqType = [req.extraData intValue];
+    
+    if (reqType == VerifyCodeRequest || reqType == LoginRequest) {
+        Release(request);
+    } else if (reqType == CheckActiveRequest) {
+        Release(checkActiveRequest);
+    } else if (reqType == ActiveRequest) {
+        Release(activeRequest);
+    } else {
+        Release(req);
+    }
+    
+    if (![self isLoginOnBackground]) {
+        Alert(@"登录失败", @"服务器连接失败");
+    }
+
+    self.bdVerify = nil;
+    self.verifyButton = nil;
+    [tableView reloadData];
+}
+
+
+@end
+

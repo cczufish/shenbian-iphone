@@ -1,0 +1,510 @@
+//
+//  NewPhotoController.m
+//  shenbian
+//
+//  Created by xhan on 4/27/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#import "PhotoController.h"
+#import "LoginController.h"
+#import "PickShopViewController.h"
+#import "PhotoSubmitVC.h"
+#import "PickCommodityViewController.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
+#import "AppDelegate.h"
+#import "Utility.h"
+#import	"PhotoPreviewVC.h"
+#import "HttpRequest+FilePost.h"
+#import "SBApiEngine.h"
+#import "LocationService.h"
+#import "SBLocation.h"
+#import "AlertCenter.h"
+#import "TKAlertCenter.h"
+
+#import "PhotoUploadSuccessVC.h"
+#import "UIImage+PL.h"
+#import "UIImage+Extends.h"
+
+#import <ImageIO/ImageIO.h>
+
+//#define UploadPhotoClipSizePor CGSizeMake(640, 960)
+//#define UploadPhotoClipSizeLan CGSizeMake(960, 640)
+
+#define UploadPhotoClipSizePor CGSizeMake(480, 720)
+#define UploadPhotoClipSizeLan CGSizeMake(720, 480)
+
+//#define UploadPhotoClipSizePor CGSizeMake(320, 480)
+//#define UploadPhotoClipSizeLan CGSizeMake(480, 320)
+
+@implementation PhotoController
+@synthesize rootVC,neededUploadImg, isHaveCamera;
+@synthesize shopId, shopName, commodity, photoLinkID, isPhotoPosted, delegate;
+@synthesize isCommodityShop;
+@synthesize metaData;
+
+static PhotoController* _gInstance = NULL;
+
+#pragma mark - NSObject
++ (id)singleton
+{
+	if (!_gInstance) {
+		_gInstance = [[self alloc] init];
+	}
+	return _gInstance;
+}
+
+- (id)init{
+	self = [super init];
+	if (self) {
+		isHaveCamera = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+        self.rootVC.navigationController.delegate = self;
+	}
+	return self;
+}
+
+- (void)dealloc{
+    
+    [self cancelRequest];
+    VSSafeRelease(photoLinkID);
+    
+	VSSafeRelease(neededUploadImg);
+	VSSafeRelease(rootVC);
+	VSSafeRelease(pickerVC);
+	
+	self.metaData = nil;
+	
+    [shopId release];
+    [shopName release];
+    [commodity release];
+	[super dealloc];
+}
+
+- (UIImagePickerController*)pickerVC
+{
+	if (!pickerVC) {
+		pickerVC = [[UIImagePickerController alloc] init];
+		pickerVC.delegate = self;
+	}
+	return pickerVC;
+}
+
+#pragma mark - public
+
+- (void)showActionSheet
+{
+	self.metaData = nil;
+
+	isPhotoPosted = NO;
+    
+    LoginController *auth = [LoginController sharedInstance];
+    if (![auth isLogin]) {
+        [auth showLoginView];
+        auth.delegate = self;
+        auth.loginSuccessSEL = @selector(loginActionSuccess);
+        return;
+    }
+	
+	
+	UIActionSheet* sheet;
+	if(isHaveCamera){
+		sheet = 
+		[[UIActionSheet alloc] initWithTitle:@""
+									delegate:self
+						   cancelButtonTitle:NSLocalizedString(@"取消",nil)
+					  destructiveButtonTitle:nil
+						   otherButtonTitles:NSLocalizedString(@"拍照上传",nil),
+		 NSLocalizedString(@"从相册上传",nil),nil];		
+	}else {
+		sheet = 
+		[[UIActionSheet alloc] initWithTitle:@""
+									delegate:self
+						   cancelButtonTitle:NSLocalizedString(@"取消",nil)
+					  destructiveButtonTitle:nil
+						   otherButtonTitles:NSLocalizedString(@"从相册上传",nil),nil];
+	}
+
+	[sheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
+	// show from top window
+	[sheet showInView:[AppDelegate sharedDelegate].window];
+	[sheet release];
+}
+
+- (void)showImagePicker:(UIImagePickerControllerSourceType)type
+{
+    // this line is used for take PhotoAgain state
+    [pickerVC dismissModalViewControllerAnimated:NO];
+    VSSafeRelease(pickerVC);
+    
+	if ([UIImagePickerController isSourceTypeAvailable:type])
+    {
+		[self pickerVC].sourceType = type;
+		if (!rootVC) {
+			[NSException raise:@"Plz setup rootVC of NewPhotoController before active Picker" format:@""];
+		}
+		[rootVC presentModalViewController:pickerVC animated:YES];
+    }
+    
+    [self remoteLoadPhotoID];
+}
+
+- (void)clean
+{
+    self.shopId = nil;
+    self.shopName = nil;
+    self.commodity = nil;
+    self.photoLinkID = nil;
+    self.neededUploadImg = nil;
+    isPhotoPosted = NO;
+}
+
+
+- (void)dismissViewController
+{
+    [self cancelRequest];
+    [[self pickerVC] dismissModalViewControllerAnimated:YES];
+    [self clean];
+    
+    VSSafeRelease(pickerVC);
+}
+
+#pragma mark - LoginControl delegates
+
+- (void)loginActionSuccess
+{
+    LoginController *auth = [LoginController sharedInstance];
+    auth.delegate = nil;
+    [self showActionSheet];
+}
+
+#pragma mark - actionsheet delegates
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+	//pressed cancel button
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+		Stat(@"photobutton_cancel");
+        return;
+    }
+	
+	if (isHaveCamera && buttonIndex == 0) {
+		Stat(@"photobutton_takepload");
+        sourceType = UIImagePickerControllerSourceTypeCamera;		
+	}else {
+//		Stat(@"")
+		Stat(@"photobutton_selpic_into");
+        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+	}
+    [self showImagePicker:sourceType];
+
+}
+
+/*
+- (void)whatClass:(id)obj {
+	NSString *result = @"unknown";
+	NSArray *arrClass = [NSArray arrayWithObjects:@"NSDictionary", @"NSArray", @"NSNumber", @"NSSet", @"NSString", nil];
+	
+	for (NSString *clsName in arrClass) {
+		if ([obj isKindOfClass:[NSClassFromString(clsName) class]]) {
+			result = clsName;
+			break;
+		}
+	}
+
+	NSLog(@"class is %@", result);
+			 
+}
+//*/
+
+#pragma mark - image picker delegates
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // Get metadata from photo
+    //*
+    if ([[Utility systemVersion] isEqual:@"4"]) {
+        NSURL *assetURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+        
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        
+        [library assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+            ALAssetRepresentation *representation = [asset defaultRepresentation];
+            NSDictionary *metadataDict = [representation metadata]; 
+			self.metaData = metadataDict;
+//            NSLog(@"%@",metadataDict);
+//			NSLog(@"%@", [metadataDict valueForKeyPath:@"{GPS}.Latitude"]);
+//			for (id md in metadataDict) {
+//				NSLog(@"md: %@", md);
+//				[self whatClass:md];
+//			}
+        } failureBlock:^(NSError *error) {
+//            NSLog(@"%@",[error description]);
+        }];
+        [library release];
+    }
+	
+
+     //*/
+    Stat(@"photobutton_selpic_confirm");
+	UIImage *image = [[info valueForKey:UIImagePickerControllerOriginalImage] retain];
+		
+	CGSize clipSize;
+	if (image.size.width > image.size.height) {
+		clipSize = UploadPhotoClipSizeLan;
+	}else {
+		clipSize = UploadPhotoClipSizePor;
+	}
+    CGFloat horizontalRatio = clipSize.width / image.size.width;
+    CGFloat verticalRatio = clipSize.height / image.size.height;
+    CGFloat ratio;
+    ratio = MIN(horizontalRatio, verticalRatio);
+    ratio = MIN(1, ratio);
+    CGSize newSize = CGSizeMake((int)(image.size.width * ratio), (int)(image.size.height * ratio));
+    
+//    UIImage* clipedImage = [image resizedImage:newSize interpolationQuality:kCGInterpolationDefault];
+    UIImage* clipedImage = [image transformWidth:newSize.width height:newSize.height rotate:YES];
+    
+	[image release];
+	self.neededUploadImg = clipedImage;
+
+//	picker  
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    picker.navigationBarHidden = NO;
+    picker.wantsFullScreenLayout = NO;
+    picker.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    
+    picker.navigationBar.translucent = NO;
+    [picker visibleViewController].wantsFullScreenLayout = NO;
+    
+    [self postCurrentImage]; // 预处理:上传图片
+    
+    PhotoPreviewVC *previewController = [[PhotoPreviewVC alloc] initWithImage:self.neededUploadImg];
+    previewController.sourceType = sourceType;
+
+    if (sourceType == UIImagePickerControllerSourceTypeCamera) {
+        // Store image into library
+        UIImageWriteToSavedPhotosAlbum(self.neededUploadImg, nil, nil, nil);
+        
+        // Skip preview controller
+        NSMutableArray *controllers = [NSMutableArray arrayWithArray:[picker viewControllers]];
+        [controllers addObject:previewController];
+        [picker setViewControllers:controllers];
+        [picker pushViewController:[previewController nextController] animated:YES];
+    } else {
+        [picker pushViewController:previewController animated:YES];
+    }
+    [previewController release];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+	Stat(@"photobutton_selpic_cancel");
+    [self dismissViewController];
+}
+
+
+#pragma mark -
+#pragma UINavigationControllerDelegate
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated 
+{
+    PhotoController *pc = [PhotoController singleton];
+    if ([viewController isKindOfClass:[PickShopViewController class]]) {
+        pc.shopId   = nil;
+        pc.shopName = nil;
+    } else if ([viewController isKindOfClass:[PickCommodityViewController class]]) {
+        pc.commodity = nil;
+    } else {
+        
+    }
+}
+
+@end
+
+
+#pragma mark - PhotoController (Network)
+@implementation PhotoController (Network)
+
+- (void)cancelRequest
+{
+    CancelRequest(hcPhotoLinkID);
+    CancelRequest(hcPhotoPost);
+    CancelRequest(hcMoreInfo);
+}
+
+- (void)remoteLoadPhotoID
+{
+    if (!hcPhotoLinkID) {
+        hcPhotoLinkID = [[HttpRequest alloc] init];
+        hcPhotoLinkID.delegate = self;
+    }
+    [hcPhotoLinkID requestGET:NSStringADD(ROOT_URL, @"/getLinkId") useStat:YES];
+}
+
+- (void)postCurrentImage
+{
+    NSAssert(self.neededUploadImg, @"Image can't be nil");
+    if (!photoLinkID) {
+        DLog(@"上传图片等待... 正在获取LinkID");
+        return;
+    }
+    
+    UIImage* img = self.neededUploadImg;
+    NSData* imgdata =  UIImageJPEGRepresentation(img, 0.6);
+    
+    VSLog(@"开始上传图片: image(%.f,%.f) size: %@", 
+          img.size.width, img.size.height, [NSString localizedFileSize:[imgdata length]]);
+    
+    CancelRequest(hcPhotoPost);
+    hcPhotoPost = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+    isPhotoPosted = NO;
+    [hcPhotoPost requestPOST:NSStringADD(ROOT_URL, @"/updataPic")
+                  parameters:VSDictOK(self.photoLinkID, @"link_id")
+                    fileName:@"pic"
+                        data:imgdata];
+}
+
+- (void)postImageWithData:(NSDictionary *)postDict {
+	CancelRequest(hcMoreInfo);
+	hcMoreInfo = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+	[hcMoreInfo requestPOST:NSStringADD(ROOT_URL, @"/updataContext") parameters:postDict useStat:YES];
+}
+
+- (void)postImageInfoWith:(NSString*)comments shareSina:(BOOL)isWeibo
+{    
+    if (!isPhotoPosted) {
+        DLog(@"等待,图片正在上传");
+        return;
+    }
+
+    if (shopId && shopName && commodity && photoLinkID) {
+        comments = SETNIL(comments, @"");
+        NSDictionary* postDict = VSDictOK(commodity,@"c",
+                                          shopName,@"s",
+                                          shopId,@"s_fcrid",
+                                          comments,@"detail",
+                                          NUM(isWeibo),@"sns_sina",
+                                          photoLinkID,@"link_id");
+        
+        // Add x, y parameters for statistics on Server
+        SBLocation *location = [[LocationService sharedInstance] currentLocation];
+		NSMutableDictionary *md = [NSMutableDictionary dictionaryWithDictionary:postDict];
+		if (nil != [PhotoController singleton].metaData) {
+			CGFloat latitude = [[metaData valueForKeyPath:@"{GPS}.Latitude"] floatValue];
+			CGFloat longitude = [[metaData valueForKeyPath:@"{GPS}.Longitude"] floatValue];
+			NSString *dateStr = [metaData valueForKeyPath:@"{Exif}.DateTimeDigitized"];
+			
+			NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+			[formatter setDateFormat:@"yyyy:MM:dd HH:mm:ss"];
+			[formatter setTimeZone:[NSTimeZone localTimeZone]];
+			NSDate *date = [formatter dateFromString:dateStr];
+			
+			[md setObject:[NSNumber numberWithFloat:latitude] forKey:@"x"];
+			[md setObject:[NSNumber numberWithFloat:longitude] forKey:@"y"];
+			[md setObject:[NSNumber numberWithInt:[date timeIntervalSince1970]] forKey:@"time"];
+			
+		} else if (location) {
+            [md setObject:[NSNumber numberWithFloat:location.latitude] forKey:@"x"];
+            [md setObject:[NSNumber numberWithFloat:location.longitude] forKey:@"y"];
+        }
+
+		postDict = md;
+
+		DLog(@"postdict: %@", postDict);
+		
+		[self postImageWithData:postDict];
+		
+//        CancelRequest(hcMoreInfo);
+//        hcMoreInfo = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+//        [hcMoreInfo requestPOST:NSStringADD(ROOT_URL, @"/updataContext") parameters:postDict useStat:YES];
+    } else {
+        //TODO: handle errors here
+        Alert(@"necessary filed", @"missing! info");
+    }
+}
+
+- (void)_linkIDFetched
+{
+    if (self.neededUploadImg) {
+        [self postCurrentImage];
+    }
+    if ([delegate respondsToSelector:@selector(photoLinkIDPosted:)] ) {
+        [delegate photoLinkIDPosted:YES];
+    }
+}
+
+- (void)requestSucceeded:(HttpRequest *)request
+{
+    NSError* error = nil;
+    NSDictionary* dict = [SBApiEngine parseHttpData:request.recievedData error:&error];
+    if (error) {
+        [self requestFailed:request error:error];
+        return;
+    }
+    
+    if (request == hcPhotoLinkID) {
+        self.photoLinkID = VSDictV(dict, @"link_id");
+        [self _linkIDFetched];
+        VSLog(@"图片LinkID获取成功 %@", self.photoLinkID);
+        return;
+    }
+    
+    if (request == hcPhotoPost) {
+        Stat(@"photobutton_albumupload?errcode=0");
+        VSLog(@"图片上传成功 %@", dict);
+        isPhotoPosted = YES;
+        if ([delegate respondsToSelector:@selector(photoPosted:)] ) {
+            [delegate photoPosted:YES];
+        }
+        return;
+    }
+    
+    if (request == hcMoreInfo) {
+        Stat(@"photocommit_commit?errcode=0");
+        VSLog(@"拍照提交成功 %@", dict);
+        if ([delegate respondsToSelector:@selector(photoInfoPosted:)] ) {
+            [delegate photoInfoPosted:YES];
+        }
+        if ([delegate respondsToSelector:@selector(photoProgressSuccessd:)]) {
+            [delegate photoProgressSuccessd:dict];
+        }
+        return;
+    }
+}
+
+- (void)requestFailed:(HttpRequest *)request error:(NSError *)error
+{
+    if (request == hcPhotoLinkID) {
+        TKAlert(@"网络连接失败");
+//        [self dismissViewController];
+        return;
+    }
+    
+    if (request == hcPhotoPost) {
+        NSString *action = [NSString stringWithFormat:@"photobutton_albumupload?errcode=%d", [error code]];
+        Stat(action);
+        TKAlert(@"发送图片失败");
+//        [self dismissViewController];
+        return;
+    }
+    
+    if (request == hcMoreInfo) {
+        NSString *action = [NSString stringWithFormat:@"photocommit_commit?errcode=%d", [error code]];
+        Stat(action);
+//        if ([error code] == 21010) {
+//            TKAlert(@"对不起，您所发布的信息中有不适宜的内容，请修改后发布！");
+//		} else if (21014 == [error code]) {
+//            TKAlert(@"传的太快了,建议您休息下再发~");
+//        } else {
+//            TKAlert(@"拍照提交失败");
+//        }
+        if ([delegate respondsToSelector:@selector(photoInfoPosted:)] ) {
+            [delegate photoInfoPosted:NO];
+        }
+        return;
+    }
+}
+
+
+
+@end

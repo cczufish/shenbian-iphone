@@ -1,0 +1,225 @@
+//
+//  VSAlertView.m
+//  shenbian
+//
+//  Created by Leeyan on 11-7-19.
+//  Copyright 2011 ÁôæÂ∫¶. All rights reserved.
+//
+
+#import "VSAlertView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "AppDelegate.h"
+
+
+#define GROW_SCALE   1.15
+#define SHRINK_SCALE 0.80
+#define NORMAL_SCALE 1.00
+
+#define GROW_ANIMATION_DURATION    0.10
+#define SHRINK_ANIMATION_DURATION  0.10
+#define RESTORE_ANIMATION_DURATION 0.10
+
+@interface VSAlertView(PrivateMethods)
+
+- (CATransform3D)_transformForScale:(CGFloat)scale;
+- (void)_addAnimationToScale:(CGFloat)scale duration:(NSTimeInterval)duration;
+
+@end
+
+
+@implementation VSAlertView
+
+<<<<<<< .mine
+- (UIWindow *)mainWindow
+{
+    return [[UIApplication sharedApplication] keyWindow];
+=======
+
+- (id)initWithFrame:(CGRect)frame {
+    NSAssert(NO, @"you can't init from this method");
+    return self;
+>>>>>>> .r7545
+}
+
+- (id)initWithMessage:(NSString *)_message icon:(UIImage *)_icon delegate:(id)_delegate
+{
+    self = [super initWithFrame:[UIScreen mainScreen].bounds];
+	if (self) {
+        self.backgroundColor = [UIColor blackColor];
+        self.alpha = 0.8;
+		delegate = _delegate;
+<<<<<<< .mine
+        
+        dialogView = [[UIImageView alloc] initWithFrame:CGRectMake(48, 200, 224, 132)];
+        dialogView.image = [PNGImage(@"alert-bg") stretchableImageWithLeftCapWidth:40 topCapHeight:20];
+        dialogView.userInteractionEnabled = YES;
+        
+        UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(38, 15, 40, 31)];
+        iconView.image = _icon;
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(90, 10, 100, 40)];
+        label.text = _message;
+        label.font = FontWithSize(18);
+        label.textColor = [UIColor whiteColor];
+        label.backgroundColor = [UIColor clearColor];
+//        label.textAlignment = UITextAlignmentCenter;
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *btnImage = [PNGImage(@"alert-button") stretchableImageWithLeftCapWidth:20 topCapHeight:10];
+        [button setBackgroundImage:btnImage forState:UIControlStateNormal];
+        [button setFrame:CGRectMake(15, 75, 224 - 30, 36)];
+        [button setTitle:@"确认" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(onBtnConfirm) forControlEvents:UIControlEventTouchUpInside];
+        
+        [dialogView addSubview:label];
+        [dialogView addSubview:iconView];
+        [dialogView addSubview:button];
+        [iconView release];
+        [label release];
+        
+        [self addSubview:dialogView];
+=======
+		
+>>>>>>> .r7545
+	}
+	return self;
+}
+
+<<<<<<< .mine
+- (void)show
+{
+    [dialogView.layer removeAllAnimations];
+    
+    [[self mainWindow] addSubview:self];
+    
+    _growing = YES;
+    [self _addAnimationToScale:GROW_SCALE duration:GROW_ANIMATION_DURATION];
+=======
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code.
+
+	// BackgroundColor
+//	alertLayer = [CALayer layer];
+//	alertLayer.shadowOffset = CGSizeMake(0, 3);
+//	alertLayer.shadowRadius = 5.0f;
+//	alertLayer.shadowColor = [UIColor blackColor].CGColor;
+//	
+//	alertLayer.delegate = self;
+
+	const float margin = 25.0f;
+	const float parentHeight = parentView.height;
+	
+	CGSize messageSize = [message sizeWithFont:FontWithSize(16) 
+							 constrainedToSize:CGSizeMake(129, MAXFLOAT)
+								 lineBreakMode:UILineBreakModeTailTruncation];
+	float middleLineOfIconAndMessage = MAX(messageSize.height, 31) / 2 + margin;
+	float frameHeight = margin + MAX(messageSize.height, 31) + margin + 36 + margin;
+	
+	//	背景框
+	UIImage *alertBg = [PNGImage(@"alert-bg") stretchableImageWithLeftCapWidth:40 topCapHeight:40];
+	[alertBg drawInRect:vsrc(160, parentHeight / 2, 224, frameHeight)];
+	
+	//	icon
+	[icon drawAtPoint:ccp(38 + margin, (parentHeight - frameHeight) / 2 + middleLineOfIconAndMessage - 31 / 2)];
+	
+	//	提示文字
+	[[UIColor whiteColor] set];
+	[message drawInRect:vsr(38 + margin + 40 + margin, (parentHeight - frameHeight) / 2 +middleLineOfIconAndMessage - messageSize.height / 2,
+							messageSize.width, messageSize.height) withFont:FontWithSize(16)];
+	
+	//	按钮
+	UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[confirmButton setBackgroundImage:PNGImage(@"alert-button") forState:UIControlStateNormal];
+	confirmButton.frame = vsrc(160, (parentHeight + frameHeight) / 2 - margin - 18, 172, 36);
+	[confirmButton setTitle:@"确认" forState:UIControlStateNormal];
+	[confirmButton addTarget:self action:@selector(onConfirmButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+	[self addSubview:confirmButton];
+	
+>>>>>>> .r7545
+}
+
+<<<<<<< .mine
+- (void)hide
+{
+    _growing = NO;
+    _shrinking = NO;
+    [self removeFromSuperview];
+=======
+- (void)showInView:(UIView *)view {
+	parentView = [view retain];
+	self.backgroundColor = [UIColor clearColor];
+	self.layer.backgroundColor = VSColorRGBA(0x00000080).CGColor;
+	
+	[parentView addSubview:self];
+>>>>>>> .r7545
+}
+
+- (void)onBtnConfirm 
+{
+	if ([delegate respondsToSelector:@selector(alertConfirmed:)]) {
+		[delegate performSelector:@selector(alertConfirmed:) withObject:self];
+	}
+    [self hide];
+}
+
+- (void)dealloc {
+    [dialogView release];
+	[alertLayer release];
+    [super dealloc];
+}
+
+
+#pragma -
+#pragma PrivateMethods
+- (CATransform3D)_transformForScale:(CGFloat)scale 
+{
+    if (scale == NORMAL_SCALE) {
+        return CATransform3DIdentity;
+    } else {
+        CATransform3D scaleTransform = CATransform3DScale(CATransform3DIdentity, scale, scale, 1.0);
+        CGFloat h = dialogView.layer.frame.size.height;
+        CGFloat yTrans = h/2.0 - (h*scale)/2.0;
+        CGFloat xTrans = 0;
+        CATransform3D translateTransform = CATransform3DTranslate(CATransform3DIdentity, xTrans, yTrans, 1.0);
+        return CATransform3DConcat(scaleTransform, translateTransform);
+    }
+}
+
+- (void)_addAnimationToScale:(CGFloat)scale duration:(NSTimeInterval)duration 
+{
+    CABasicAnimation *transformAni = [CABasicAnimation animation];
+    transformAni.fromValue = [NSValue valueWithCATransform3D:dialogView.layer.transform];
+    transformAni.duration = duration;
+    transformAni.delegate = self;
+    dialogView.layer.transform = [self _transformForScale:scale];
+    [dialogView.layer addAnimation:transformAni forKey:@"transform"];
+}
+
+
+#pragma -
+#pragma CAAnimation delegate
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    if (!flag) { // Some exception, animation did not finished
+        _growing = NO;
+        _shrinking = NO;
+        dialogView.layer.transform = [self _transformForScale:NORMAL_SCALE];
+        [dialogView.layer removeAllAnimations];
+    }
+    
+    if (_growing) {
+        _growing = NO;
+        _shrinking = YES;
+        [self _addAnimationToScale:SHRINK_SCALE duration:SHRINK_ANIMATION_DURATION];
+    } else if (_shrinking) {
+        _shrinking = NO;
+        [self _addAnimationToScale:NORMAL_SCALE duration:RESTORE_ANIMATION_DURATION];
+    } else {
+        _growing = NO;
+        _shrinking = NO;
+    }
+}
+
+@end

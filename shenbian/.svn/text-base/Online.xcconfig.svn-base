@@ -1,0 +1,11 @@
+//
+//  Online.xcconfig
+//  shenbian
+//
+//  Created by MagicYang on 4/29/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#include "Debug.xcconfig"
+
+GCC_PREPROCESSOR_DEFINITIONS = ENV_Online

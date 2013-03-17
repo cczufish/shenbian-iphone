@@ -1,0 +1,284 @@
+//
+//  AppDelegate.m
+//  shenbian
+//
+//  Created by MagicYang on 3/31/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "MainViewController.h"
+#import "DiscoveryViewController.h"
+#import "HomeViewController.h"
+#import "MoreViewController.h"
+
+#import "PhotoController.h"
+#import "LoginController.h"
+#import "VSTabBarController.h"
+#import "VSTabBarController+Swip.h"
+
+#import "SBSegmentView.h"
+#import "SBTabBar.h"
+#import "SBGuideView.h"
+
+#import "SDImageCache.h"
+#import "LocationService.h"
+#import "PhotoSubmitVC.h"
+#import "CacheCenter.h"
+
+#import "SBAppVersionControl.h"
+#import "AlertCenter.h"
+#import "Notifications.h"
+#import "StatService.h"
+@implementation AppDelegate
+
+
+@synthesize window=_window;
+
++ (AppDelegate*)sharedDelegate
+{
+    return (AppDelegate*)[UIApplication sharedApplication].delegate;
+}
+
+- (void)showLatestTab
+{
+    _tabBarController.selectedIndex = 0;
+    DiscoveryViewController* discoveryVC =  [[discoveryNavCtl viewControllers] objectAtIndex:0];
+    [discoveryVC selectLatestTab];
+}
+
+- (void)checkForNewVersion
+{
+    if (!versionControl) {
+        versionControl = [[SBAppVersionControl alloc] init];
+        versionControl.delegate = self;
+    }
+    [versionControl checkForUpdateAtLocalfile];
+    [versionControl checkForUpdateOnline];  //todo: 改成 perform 形式
+//    [versionControl performSelector:@selector(checkForUpdateOnline) withObject:nil afterDelay:0.5];
+}
+
+- (void)appVersionControl:(SBAppVersionControl*)control newVersionFound:(NSString*)version details:(NSString*)message isExpired:(BOOL)isExpired isLocal:(BOOL)isLocal
+{
+    static BOOL isLocalExpired = NO;
+    //local check
+    if (isLocal) {        
+        //cancel checkForUpdateOnline action
+        if (isExpired) {
+            isLocalExpired = YES;
+            [versionControl freezeApp:[NSString stringWithFormat:@"你的版本已经过期，请下载%@继续使用",version]];
+        }        
+    }else{
+        // online check
+        if (!isLocalExpired) {
+            NSString* message = isExpired ? 
+            [NSString stringWithFormat:@"发现新版本:%@\n你的版本已经过期，下次无法使用喔!",version] : 
+            [NSString stringWithFormat:@"发现新版本:%@!",version];
+            Alert(@"版本提示", message);
+        }
+    }
+}
+
+
+#pragma mark -Handle takePicture buttons
+
+- (void)onBtnTakePhoto:(id)sender
+{
+    [[PhotoController singleton] clean];
+	[[PhotoController singleton] showActionSheet];
+}
+
+#pragma mark - tabbar controller delegates && LoginController delegate
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    BOOL result = YES;
+    if (viewController == homeNavCtl) {
+        LoginController* loginC = [LoginController sharedInstance];
+        if (![loginC isLogin]) {
+            loginC.delegate = self;
+            loginC.loginSuccessSEL = @selector(onLoginFromHomeTabSuccess:);
+            [loginC showLoginView];
+            result = NO;
+        }
+    }
+    return result;
+}
+
+- (void)onLoginFromHomeTabSuccess:(LoginController*)loginC
+{
+    loginC.delegate = nil;
+    _tabBarController.selectedIndex = 2;
+}
+
+#pragma mark -others
+
+- (void)loadAllControllers
+{
+    if (!discoveryNavCtl) {
+		DiscoveryViewController *discovery = [DiscoveryViewController new];
+		discovery.title = @"发现";
+		discoveryNavCtl = [[VSNavigationController alloc] initWithRootViewController:discovery];
+		[discovery release];
+	}
+    
+	if (!mainNavCtl) {
+		MainViewController *main = [MainViewController new];
+		main.title = @"搜索";
+		mainNavCtl = [[VSNavigationController alloc] initWithRootViewController:main];
+		[main release];
+	}
+
+	if (!homeNavCtl) {
+		HomeViewController *home = [[HomeViewController alloc] initWithUserID:nil];
+		home.title = @"我";
+        home.isMainAccount = YES;
+		homeNavCtl = [[VSNavigationController alloc] initWithRootViewController:home];
+		[home release];
+	}
+    
+	if (!moreNavCtl) {
+		MoreViewController *more = [MoreViewController new];
+		more.title = @"更多";
+		moreNavCtl = [[VSNavigationController alloc] initWithRootViewController:more];
+		[more release];
+	}
+    
+    SBTabBar* tabbar = [SBTabBar new];
+    [tabbar cameraBtnAddTarget:self action:@selector(onBtnTakePhoto:)];
+    [_tabBarController setupTabBar:tabbar
+                   viewControllers:VSArray(discoveryNavCtl, mainNavCtl, homeNavCtl, moreNavCtl)];
+    _tabBarController.tabBarHeight = 44;
+    _tabBarController.selectedIndex = 0;
+    [tabbar release];
+}
+
+// Discover放首位 (变态)
+- (void)layoutControllersHighlightDiscover
+{
+    if (isSearchFirstTab) {
+        [_tabBarController exchangeControllersBetween:0 : 1];
+        isSearchFirstTab = NO;
+        _tabBarController.selectedIndex = 0;
+    }
+}
+
+// Search放首位 (变态)
+- (void)layoutControllersHighlightSearch
+{
+    if (!isSearchFirstTab) {
+        [_tabBarController exchangeControllersBetween:0 : 1];
+        isSearchFirstTab = YES;
+        _tabBarController.selectedIndex = 0;
+    }
+}
+
+- (void)setupApplicationBackground
+{
+    UIImageView *bg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
+    bg.image = PNGImage(@"bg");
+    [_window addSubview:bg];
+    [bg release];
+}
+
+- (void)setupTabbarController
+{
+    _tabBarController = [[VSTabBarController alloc] init];
+	_tabBarController.delegate = self;
+    [self loadAllControllers];
+	[PhotoController singleton].rootVC = _tabBarController;
+    [_window addSubview:_tabBarController.view];
+}
+
+- (void)cityChanged
+{
+    if ([[CacheCenter sharedInstance] isHotCityCurrent]) {
+		[self layoutControllersHighlightDiscover];
+	} else {
+		[self layoutControllersHighlightSearch];
+	}
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [Notifier addObserver:self selector:@selector(cityChanged) name:kCityChanged object:nil];
+    
+    // 初始化UI
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [_window makeKeyAndVisible];
+    [self setupApplicationBackground];  // 全局背景图
+    [self setupTabbarController];       // Tabbar和它的Controller们
+    
+    // 版本检查 
+    // 2.0 不作版本检查
+    [self performSelector:@selector(checkForNewVersion) withObject:nil afterDelay:1];
+    
+    // 读取配置
+    [[CacheCenter sharedInstance] restore];
+    
+    // 自动登录
+    [[LoginController sharedInstance] autoLogin];
+    
+    // 新手引导(仅用于第一次显示)
+    if ([[CacheCenter sharedInstance] isFirstUsed]) {
+        [SBGuideView showGuide];
+        [[CacheCenter sharedInstance] recordFirstUsed];
+    }
+
+	UIViewController *homeVC = [[[_tabBarController viewControllers] objectAtIndex:0] topViewController];
+	adController = [[AdvertisementController alloc] initWithFrame:vsr(0, 330, 320, 40)
+																			   andDelegate:homeVC
+																			   andDuration:10.0f
+																					andUrl:nil];
+	[adController performSelector:@selector(loadAdvertisement)
+					   withObject:nil
+					   afterDelay:3.0f];
+    
+    StatService *ss = [StatService new];
+    [ss recordAction:@"open" atTime:[[NSDate date] timeIntervalSince1970]];
+    [ss recordAction:@"close" atTime:[[NSDate date] timeIntervalSince1970]];
+    [ss writeStatToDisk];
+    return YES;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [[HttpRequestCacheCenter sharedInstance] distoryCacheData];
+    
+#ifdef DEBUG
+    [[SDImageCache sharedImageCache] clearDisk];
+#endif
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [CacheCenter sharedInstance].promptNotCurrentCity = YES;
+    [[LocationService sharedInstance] startLocation];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    
+}
+
+- (void)dealloc
+{	
+    [_window release];
+    [_tabBarController release];    
+    [discoveryNavCtl release];
+    [mainNavCtl release];
+    [homeNavCtl release];
+    [moreNavCtl release];
+	[adController release];
+	
+    [super dealloc];
+}
+
+@end

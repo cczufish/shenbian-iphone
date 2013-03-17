@@ -1,0 +1,405 @@
+//
+//  SBAdvertisementView.m
+//  shenbian
+//
+//  Created by Leeyan on 11-6-20.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#import "SBAdvertisementView.h"
+#import "SBNavigationController.h"
+#import "VSTabBarController.h"
+#import "UIButton+RemoteImage.h"
+#import "LoginController.h"
+#import "SBApiEngine.h"
+#import "TKAlertCenter.h"
+#import "ShopInfoViewController.h"
+
+@interface SBAdvertisementView ()
+
+- (void)normalAdLaunch;
+- (void)shopAdLaunch;
+- (void)activityAdLaunch;
+
+- (void)pushShop:(NSString *)shopId;
+- (void)doBack;
+
+- (void)showLoadingOnView:(UIView *)view;
+- (void)hideLoading;
+
+@end
+
+
+
+@implementation SBAdvertisementView
+
+@synthesize adModel, sender = m_sender, webView = m_webView;
+
+- (id)initWithFrame:(CGRect)frame andAdModel:(SBAdvertisement *)model{
+    
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code.
+		self.adModel = model;
+		self.frame = frame;
+    }
+    return self;
+}
+
+- (void)showAdOn:(UIViewController *)sender {
+	if ([sender.view respondsToSelector:@selector(addSubview:)]) {
+		[self setImageWithURL:[NSURL URLWithString:self.adModel.imgUrl]];
+		[self addTarget:self
+				 action:@selector(onAdTouched)
+	   forControlEvents:UIControlEventTouchUpInside];
+		[sender.view addSubview:self];
+	}
+	
+	self.sender = sender;
+}
+
+- (void)hideAd {
+	if ([self.sender respondsToSelector:@selector(advertisementWillHide)]) {
+		[self.sender performSelector:@selector(advertisementWillHide) withObject:self];
+		return;
+	}
+	[UIView beginAnimations:@"hideAd" context:nil];
+	[UIView setAnimationDuration:0.75f];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(animationDone:finished:context:)];
+	[UIView setAnimationTransition:UIViewAnimationCurveEaseInOut forView:self cache:YES];
+	
+	self.origin = CGPointMake(0, 372);
+	
+	[UIView commitAnimations];
+}
+
+- (void)animationDone:(NSString *)animationID finished:(BOOL)finished context:(void *)context {
+	if ([animationID isEqualToString:@"hideAd"]) {
+		[self removeFromSuperview];
+	}
+	
+	if ([self.sender respondsToSelector:@selector(advertisementDidHided)]) {
+		[self.sender performSelector:@selector(advertisementDidHided)];
+	}
+}
+
+- (void)onAdTouched {
+	if (nil == self.adModel.jumpUrl) {
+		return;
+	}
+	
+//	self.adModel.text = @"8";	//	test code
+//	self.adModel.type = @"3";
+//	self.adModel.jumpUrl = @"http://fe.baidu.com/~gsl/1.html";
+
+//	self.adModel.type = @"2";
+//	self.adModel.jumpUrl = @"c9e24a2762a0afd619301f72";
+
+	switch ([self.adModel.type intValue]) {
+		case kAdTypeNormal:
+			[self normalAdLaunch];
+			break;
+		case kAdTypeShop:
+			[self shopAdLaunch];
+			break;
+		case kAdTypeActivity:
+			[self activityAdLaunch];
+			break;
+		default:
+			break;
+	}
+}
+
+- (void)normalAdLaunch {
+	SBNavigationController *sbnc = [[SBNavigationController alloc] init];
+	sbnc.navigationItem.leftBarButtonItem = [SBNavigationController buttonItemWithTitle:@"取消"
+																			  andAction:@selector(doBack)
+																			 inDelegate:self];
+	sbnc.navigationItem.title = @"活动详情";
+	UIWebView *webView = [[UIWebView alloc] initWithFrame:vsr(0, 0, 320, 416)];
+	
+	webView.dataDetectorTypes = UIDataDetectorTypeNone;
+	
+	webView.delegate = nil;
+	
+	[sbnc addSubview:webView];
+	
+	[self showLoadingOnView:sbnc.view];
+	
+	[webView loadRequest:[NSURLRequest requestWithURL:
+						  [NSURL URLWithString:self.adModel.jumpUrl]]];
+	
+	self.webView = webView;
+	
+	[webView release];
+	
+	UINavigationController *nc = [[UINavigationController alloc]
+								  initWithRootViewController:sbnc];
+	[self.sender showModalViewController:nc animated:YES];
+    [nc release];
+}
+
+- (void)shopAdLaunch {
+	NSString *shopId = self.adModel.jumpUrl;
+	
+	[self pushShop:shopId];
+}
+
+- (void)activityAdLaunch {
+	SBNavigationController *sbnc = [[SBNavigationController alloc] init];
+	sbnc.navigationItem.leftBarButtonItem = [SBNavigationController buttonItemWithTitle:@"取消"
+																			  andAction:@selector(doBack)
+																			 inDelegate:self];
+	sbnc.navigationItem.title = @"活动详情";
+	UIWebView *webView = [[UIWebView alloc] initWithFrame:vsr(0, 0, 320, 416)];
+	
+	webView.dataDetectorTypes = UIDataDetectorTypeNone;
+	
+	webView.delegate = self;
+	
+	[sbnc addSubview:webView];
+	
+	[self showLoadingOnView:sbnc.view];
+
+	[webView loadRequest:[NSURLRequest requestWithURL:
+						  [NSURL URLWithString:self.adModel.jumpUrl]]];
+	
+	self.webView = webView;
+	
+	[webView release];
+	
+	UINavigationController *nc = [[UINavigationController alloc]
+								  initWithRootViewController:sbnc];
+	[self.sender showModalViewController:nc animated:YES];
+    [nc release];
+    [sbnc release];
+}
+
+- (void)pushShop:(NSString *)shopId {
+	ShopInfoViewController *controller = [[ShopInfoViewController alloc] initWithShopId:shopId];
+	controller.hidesBottomBarWhenPushed = YES;
+	[self.sender.navigationController pushViewController:controller animated:YES];
+	[controller release];
+}
+
+- (void)doBack {
+	if (self.webView.loading) {
+		[self.webView stopLoading];
+	}
+	[self.sender.vstabBarController dismissModalViewControllerAnimated:YES];
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code.
+}
+*/
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+	[self hideLoading];
+	if ([self.adModel.type intValue] == kAdTypeActivity) {
+		//	判断是否已报过名
+		NSString *activityId = self.adModel.text;
+		enrollStatusRequest = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+		NSDictionary *params = [NSDictionary dictionaryWithObjects:
+								[NSArray arrayWithObjects:activityId, nil] 
+														   forKeys:
+								[NSArray arrayWithObjects:@"actid", nil]
+								];
+		[enrollStatusRequest requestPOST:[NSString stringWithFormat:@"%@/getActivityStatus", ROOT_URL] parameters:params];
+	}
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+	
+	NSURL *url = [request URL];
+	
+	if ([[url absoluteString] isEqualToString:self.adModel.jumpUrl]) {
+		return YES;
+	}
+	
+//	url = [NSURL URLWithString:@"shenbian://gotoShop?id=c9e24a2762a0afd619301f72"];	//	test code
+
+	NSString *scheme = [url scheme];
+	
+	if ([scheme isEqualToString:@"shenbian"]) {
+		//	符合身边协议的链接
+		NSString *action = [url host];
+		SEL actionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@:", action]);
+		if ([self respondsToSelector:actionSelector]) {
+			NSString *query = [url query];
+			NSArray *sep = [query componentsSeparatedByString:@"&"];
+
+			NSMutableDictionary *dictParam = [NSMutableDictionary dictionary];
+			NSArray *sp = [NSArray array];
+			for (NSString *param in sep) {
+				sp = [param componentsSeparatedByString:@"="];
+				[dictParam setObject:[sp objectAtIndex:1] forKey:[sp objectAtIndex:0]];
+			}
+			[self performSelector:actionSelector withObject:dictParam afterDelay:0.1f];
+		}
+	}
+	return NO;
+}
+
+- (void)gotoShop:(NSDictionary *)params {
+	NSString *shopId = [params objectForKey:@"id"];
+	
+	[self doBack];
+	
+	[self pushShop:shopId];
+}
+
+- (void)enroll:(NSDictionary *)params {
+	if (isInEnrolling) {
+		return;
+	}
+	//	check login
+	BOOL isLogin = [[LoginController sharedInstance] isLogin];
+	if (!isLogin) {
+		//	未登录
+		[[LoginController sharedInstance] showLoginView];
+	} else {
+		//	已登录
+		//	判断是否已报过名
+		NSString *activityId = self.adModel.text;
+		enrollRequest = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+		NSDictionary *params = [NSDictionary dictionaryWithObjects:
+									[NSArray arrayWithObjects:activityId, nil] 
+														   forKeys:
+									[NSArray arrayWithObjects:@"actid", nil]
+								];
+		isInEnrolling = YES;
+		[enrollRequest requestPOST:[NSString stringWithFormat:@"%@/submitActivity", ROOT_URL] parameters:params];
+	}
+
+}
+
+- (void)requestFailed:(HttpRequest*)req error:(NSError*)error {
+	if (req == enrollRequest) {
+		isInEnrolling = NO;
+	}
+	Release(req);
+}
+
+- (void)requestSucceeded:(HttpRequest*)req {
+	NSError *error = nil;
+	NSDictionary *dict = [SBApiEngine parseHttpData:req.recievedData error:&error];
+
+	if (req == enrollStatusRequest) {
+		if (error) {
+			[self requestFailed:req error:error];
+			return;
+		}
+		
+		NSInteger status = [[dict objectForKey:@"status"] intValue];
+		NSLog(@"status: %d, dict: %@", status, dict);
+//		status = 1;		//	test code
+		switch (status) {
+			case 1:
+				//已报名
+				TKAlert(@"已经报过名");
+				[self.webView stringByEvaluatingJavaScriptFromString:@"showButton(0)"];
+				break;
+			case 0:
+				//未报名
+				[self.webView stringByEvaluatingJavaScriptFromString:@"showButton(1)"];
+				break;
+			default:
+				break;
+		}
+		
+		Release(enrollStatusRequest);
+	} else if (req == enrollRequest) {
+//		error = 0;	//	test code
+		switch ((int)error) {
+			case 0:
+				//	报名成功
+				[self.webView stringByEvaluatingJavaScriptFromString:@"showButton(2)"];
+				break;
+			case 21001:
+				TKAlert(@"系统错误");
+				break;
+			case 21003:
+				TKAlert(@"用户未登录");
+				break;
+			case 21004:
+				TKAlert(@"用户未激活");
+				break;
+			case 21013:
+				TKAlert(@"徽章可使用数为0");
+				break;
+			case 21012:
+				//	报名成功
+				TKAlert(@"已报名，不能重复报名");
+				[self.webView stringByEvaluatingJavaScriptFromString:@"showButton(2)"];
+				break;
+			default:
+				break;
+		}
+		isInEnrolling = NO;
+		Release(enrollRequest);
+	}
+}
+
+- (void)showLoadingOnView:(UIView *)view {
+	if (!loadingView) {
+		loadingView = [[LoadingView alloc] initWithFrame:CGRectZero andMessage:@""];
+	}
+	[view addSubview:loadingView];
+}
+
+- (void)hideLoading {
+	[loadingView removeFromSuperview];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- (void)dealloc {
+	self.adModel = nil;
+	self.webView.delegate = nil;
+	self.webView = nil;
+	[loadingView release];
+	[enrollRequest release];
+	[enrollStatusRequest release];
+	
+    [super dealloc];
+}
+
+
+@end

@@ -1,0 +1,22 @@
+//
+//  Debug.xcconfig
+//  shenbian
+//
+//  Created by xhan on 4/8/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+ARCHS = $(ARCHS_STANDARD_32_BIT)
+SDKROOT = iphoneos
+CODE_SIGN_IDENTITY = 
+CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
+GCC_VERSION = com.apple.compilers.llvmgcc42
+IPHONEOS_DEPLOYMENT_TARGET = 3.1
+OTHER_LDFLAGS = -ObjC -all_load
+HEADER_SEARCH_PATHS = $VSM_LIB_PATH/** /usr/include/libxml2
+GCC_OPTIMIZATION_LEVEL = 0
+GCC_SYMBOLS_PRIVATE_EXTERN = NO
+GCC_C_LANGUAGE_STANDARD = gnu99
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG
+GCC_WARN_ABOUT_RETURN_TYPE = YES
+GCC_WARN_UNUSED_VARIABLE = YES

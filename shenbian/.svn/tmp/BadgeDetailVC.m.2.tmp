@@ -1,0 +1,195 @@
+//
+//  BadgeDetailVC.m
+//  shenbian
+//
+//  Created by xhan on 5/18/11.
+//  Copyright 2011 百度. All rights reserved.
+//
+
+#import "BadgeDetailVC.h"
+#import "SBBadge.h"
+#import "HttpRequest+Statistic.h"
+#import "Utility.h"
+#import "BadgeInfoView.h"
+#import "SBApiEngine.h"
+#import "LoadingView.h"
+#import "AlertCenter.h"
+#import "VSAlertView.h"
+
+@interface BadgeDetailVC ()
+
+- (void)useBadgeSuccess;
+- (void)useBadgeFailed;
+- (void)getBadgeInfo;
+
+@end
+
+@implementation BadgeDetailVC
+
+- (id)initWithBadge:(SBBadge*)badge_;
+{
+    self = [super init];
+    if (self) {
+        badge = [badge_ retain];
+        [badge addObserver:self forKeyPath:@"picImage" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [badge removeObserver:self forKeyPath:@"picImage"];
+    CancelRequest(request);
+	CancelRequest(useBadgeRequest);
+    Release(badge);
+    Release(loadingView);
+	Release(scrollView);
+    [super dealloc];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    CancelRequest(request);
+    Release(loadingView);
+}
+
+- (void)showLoading {
+	if (!loadingView) {
+		loadingView = [[LoadingView alloc] initWithFrame:CGRectZero andMessage:@""];
+	}
+	[self addSubview:loadingView];
+}
+
+- (void)hideLoading {
+	[loadingView removeFromSuperview];
+}
+
+- (void)viewDidLoad
+{
+    self.title = @"徽章墙";
+	
+	scrollView = [[UIScrollView alloc] initWithFrame:vsr(0, 0, 320, 416)];
+	[self addSubview:scrollView];
+    self.view.backgroundColor = [UIColor whiteColor];
+	
+    [self showLoading];
+    // http://client.shenbian.com/iphone/getBadgeDetail?id=xx
+	
+	[self getBadgeInfo];
+}
+
+- (void)getBadgeInfo {
+    NSString *url = [NSString stringWithFormat:@"%@/getbadge?id=%@", ROOT_URL, badge.bid];
+    request = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+    [request requestGET:url useCache:NO useStat:YES];
+}
+
+- (void)displayBadge
+{
+    BadgeInfoView *badgeView = [[BadgeInfoView alloc] initWithBadge:badge andDelegate:self];
+    [scrollView setContentSize:CGSizeMake(320, [badgeView viewSize].height)];
+    [scrollView addSubview:badgeView];
+    [badgeView release];
+    
+    [self.view bringSubviewToFront:loadingView];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == badge) {
+        for (UIView *view in [scrollView subviews]) {
+            if ([view isKindOfClass:[BadgeInfoView class]]) {
+                [view setNeedsDisplay];
+            }
+        }
+        [self hideLoading];
+    }
+}
+
+
+#pragma mark -
+#pragma mark HttpRequestDelegate
+- (void)requestFailed:(HttpRequest *)req error:(NSError *)error {
+	if (req == request) {
+		[self hideLoading];
+		Release(request);
+	} else if (req == useBadgeRequest) {
+		[self useBadgeFailed];
+		Release(useBadgeRequest);
+	}
+}
+
+- (void)requestSucceeded:(HttpRequest*)req {
+    NSError *error = nil;
+	NSDictionary* dict = [SBApiEngine parseHttpData:req.recievedData error:&error];
+	if (req == request) {
+		if (error) {
+			[self requestFailed:request error:error];
+			return;
+		}
+		badge.picBigURL = VSDictV(dict, @"pic");
+		badge.description = VSDictV(dict, @"desc");
+		badge.isPromo = [VSDictV(dict, @"is_promo") boolValue];
+		badge.promoInfo = VSDictV(dict, @"promo");
+		badge.useableCount = [VSDictV(dict, @"use") intValue];
+		
+		[badge fetchPicByURL:badge.picBigURL];
+		
+		badge.useableCount = 100;	//	test code
+		
+		[self displayBadge];
+		
+		Release(request);
+	} else if (req == useBadgeRequest) {
+		if ([error code] == 0) {
+			[self useBadgeSuccess];
+		} else if ([error code] == 21013) {
+			[self useBadgeFailed];
+		}
+
+		Release(useBadgeRequest);
+	}
+}
+
+- (void)useBadgeTouched:(id)sender {
+	UIActionSheet *actionUse = [[UIActionSheet alloc] initWithTitle:@"本操作由活动工作人员完成" 
+														   delegate:self 
+												  cancelButtonTitle:@"取消"
+											 destructiveButtonTitle:@"确认使用"
+												  otherButtonTitles:nil];
+	[actionUse showInView:self.view];
+}
+
+- (void)useBadgeSuccess {
+	badge.useableCount = MAX(0, badge.useableCount - 1);
+	VSAlertView *alertView = [[VSAlertView alloc] initWithMessage:@"使用成功"
+															 icon:PNGImage(@"alert-icon")
+														 delegate:self];
+	[alertView show];
+    [alertView release];
+}
+
+- (void)useBadgeFailed {
+	Alert(@"使用失败", @"请查看您的网络后再试");
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+	NSString *url;
+	switch (buttonIndex) {
+		case 0:
+			url = [NSString stringWithFormat:@"%@/usebadge", ROOT_URL];
+			useBadgeRequest = [[HttpRequest alloc] initWithDelegate:self andExtraData:nil];
+			NSDictionary *postParamDict = [NSDictionary dictionaryWithObjects:
+										   [NSArray arrayWithObjects:badge.bid, nil]
+																	  forKeys:
+										   [NSArray arrayWithObjects:@"badge_id", nil]];
+			[useBadgeRequest requestPOST:url parameters:postParamDict];
+			break;
+		default:
+			break;
+	}
+	[actionSheet release];
+}
+
+@end
